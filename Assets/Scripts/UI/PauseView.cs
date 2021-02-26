@@ -22,11 +22,30 @@ namespace ZigZag.UI
 		[SerializeField]
 		private Text _tapText;
 
+		private InputHandler _inputHandler;
+
 		[Inject]
-		private void Construct(SignalBus signalBus, GameStateService stateService)
+		private void Construct(SignalBus signalBus, GameStateService stateService, InputHandler inputHandler)
 		{
 			_stateService = stateService;
+			_inputHandler = inputHandler;
+
 			signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
+			_inputHandler.LeftMouseButtonUp += OnLeftMouseButtonUp;
+		}
+
+		private void OnLeftMouseButtonUp()
+		{
+			if (_stateService.State == GameState.Pause)
+			{
+				//произошел тап
+				if (Input.GetMouseButtonUp(0))
+				{
+					_content.SetActive(false);
+
+					StartCoroutine(ShowCountdown());
+				}
+			}
 		}
 
 		private void OnGameStateChanged(GameStateSignal signal)
@@ -46,34 +65,20 @@ namespace ZigZag.UI
 			_content.SetActive(true);
 		}
 
-		private void Update()
-		{
-			if (_stateService.State == GameState.Pause)
-			{
-				//произошел тап
-				if (Input.GetMouseButtonUp(0))
-				{
-					_content.SetActive(false);
-
-					StartCoroutine(ShowCountdown());
-				}
-			}
-		}
-
 		private IEnumerator ShowCountdown()
 		{
 			for (var i = 0; i < _countdownElems.Count; i++)
 			{
 				_countdownElems[i]?.SetActive(true);
-				if (i > 1)
-				{
-					_countdownElems[i - 1]?.SetActive(false);
-				}
 
-				yield return new WaitForSecondsRealtime(1);
+				yield return new WaitForSecondsRealtime(0.7f);
+
+				_countdownElems[i]?.SetActive(false);
 			}
 
-			_countdownElems[_countdownElems.Count - 1].SetActive(false);
+			_stateService.ChangeState(GameState.Run);
+
+			//_countdownElems[_countdownElems.Count - 1].SetActive(false);
 		}
 	}
 }

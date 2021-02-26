@@ -24,19 +24,31 @@ namespace ZigZag
 
 		private GameStateService _gameStateService;
 
+		private InputHandler _inputHandler;
+
 		[Inject]
-		private void Construct(SignalBus signalBus, GameStateService gameState)
+		private void Construct(SignalBus signalBus, GameStateService gameState, InputHandler inputHandler)
 		{
 			_gameStateService = gameState;
+			_inputHandler = inputHandler;
 
 			signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
+			_inputHandler.LeftMouseButtonUp += OnLeftMouseButtonUp;
+		}
+
+		private void OnLeftMouseButtonUp()
+		{
+			if (_gameStateService.State == GameState.Run)
+			{
+				_currentDirection = _currentDirection == Vector3.left ? Vector3.forward : Vector3.left;
+			}
 		}
 
 		private void OnGameStateChanged(GameStateSignal signal)
 		{
 			switch (signal.GameState)
 			{
-				case GameState.Reset:
+				case GameState.Pause:
 					{
 						OnGameReset();
 						break;
@@ -59,10 +71,6 @@ namespace ZigZag
 				}
 				else
 				{
-					if (Input.GetMouseButtonUp(0))
-					{
-						_currentDirection = _currentDirection == Vector3.left ? Vector3.forward : Vector3.left;
-					}
 					Move();
 				}
 			}
@@ -86,16 +94,16 @@ namespace ZigZag
 
 		private void OnGameReset()
 		{
+			_rigidbody.constraints = RigidbodyConstraints.None;
 			_transform.position = new Vector3(0, 5f, 0);
 			_transform.rotation = Quaternion.Euler(Vector3.zero);
 
-			_rigidbody = gameObject.AddComponent<Rigidbody>();
 			_currentDirection = Vector3.forward;
 		}
 
 		private void OnGameFailed()
 		{
-			Destroy(_rigidbody);
+			_rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 		}
 	}
 }

@@ -20,10 +20,16 @@ namespace ZigZag.Infrastructure
 		private FinishGameDialog _finishGamePanel;
 
 		[SerializeField]
-		private NewRecordLabel _newRecordMessage;
+		private ScoreRecordText _newRecordMessage;
 
 		[SerializeField]
 		private ScoreTextView _scoreView;
+
+		[SerializeField]
+		private PauseView _pauseView;
+
+		[SerializeField]
+		private RecordTable _recordTable;
 
 		public override void InstallBindings()
 		{
@@ -38,7 +44,10 @@ namespace ZigZag.Infrastructure
 		private void BindServices()
 		{
 			Container.Bind<ScoreService>().AsSingle();
-			Container.Bind<GameStateService>().AsSingle();
+
+			Container.Bind<GameStateService>().FromNewComponentOnNewGameObject().AsSingle();
+
+			Container.Bind<InputHandler>().FromNewComponentOnNewGameObject().AsSingle();
 		}
 
 		/// <summary>
@@ -55,6 +64,10 @@ namespace ZigZag.Infrastructure
 			Container.BindInstance(_newRecordMessage).AsSingle();
 
 			Container.BindInstance(_scoreView).AsSingle();
+
+			Container.BindInstance(_pauseView).AsSingle();
+
+			Container.BindInstance(_recordTable).AsSingle();
 		}
 
 		/// <summary>

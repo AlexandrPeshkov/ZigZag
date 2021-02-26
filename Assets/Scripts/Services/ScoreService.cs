@@ -16,9 +16,9 @@ namespace ZigZag
 
 		private bool _isNewRecordSession = false;
 
-		private List<int> _scoreTable;
-
 		private int _currentScore;
+
+		public List<int> ScoreTable { get; private set; }
 
 		public int CurrentScore
 		{
@@ -37,10 +37,14 @@ namespace ZigZag
 
 		public ScoreService(SignalBus signalBus)
 		{
+			ScoreTable = new List<int>(Enumerable.Repeat(0, _highScoreSize));
+
+#if UNITY_EDITOR
+			//ClearRecordTable();
+#endif
 			signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
 			signalBus.Subscribe<PlatformCompleteSignal>(OnPlatformComplete);
 
-			_scoreTable = new List<int>(Enumerable.Repeat(0, _highScoreSize));
 			ReadScoreTable();
 		}
 
@@ -64,7 +68,7 @@ namespace ZigZag
 
 		private void OnGameFailed()
 		{
-			_scoreTable.Add(CurrentScore);
+			ScoreTable.Add(CurrentScore);
 			WriteScoreTable();
 		}
 
@@ -91,7 +95,7 @@ namespace ZigZag
 
 			if (_isNewRecordSession == false)
 			{
-				bool isRecord = _scoreTable[0] < CurrentScore;
+				bool isRecord = ScoreTable[0] < CurrentScore;
 
 				if (isRecord)
 				{
@@ -109,22 +113,35 @@ namespace ZigZag
 				var scoreValue = PlayerPrefs.GetInt($"{_highScoreKey}{i}", -1);
 				if (scoreValue > 0)
 				{
-					_scoreTable[i] = scoreValue;
+					ScoreTable[i] = scoreValue;
 				}
 			}
 
-			_scoreTable = _scoreTable.OrderByDescending(x => x).ToList();
+			ScoreTable = ScoreTable.OrderByDescending(x => x).ToList();
 		}
 
 		private void WriteScoreTable()
 		{
-			_scoreTable = _scoreTable.OrderByDescending(x => x).Take(_highScoreSize).ToList();
+			ScoreTable = ScoreTable.OrderByDescending(x => x).Take(_highScoreSize).ToList();
 
-			for (var i = 0; i < _scoreTable.Count; i++)
+			for (var i = 0; i < ScoreTable.Count; i++)
 			{
-				PlayerPrefs.SetInt($"{_highScoreKey}{i}", _scoreTable[i]);
+				PlayerPrefs.SetInt($"{_highScoreKey}{i}", ScoreTable[i]);
+				PlayerPrefs.Save();
 			}
-			PlayerPrefs.Save();
 		}
+
+#if UNITY_EDITOR
+
+		private void ClearRecordTable()
+		{
+			for (var i = 0; i < ScoreTable.Count; i++)
+			{
+				PlayerPrefs.SetInt($"{_highScoreKey}{i}", 0);
+				PlayerPrefs.Save();
+			}
+		}
+
+#endif
 	}
 }

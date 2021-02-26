@@ -7,15 +7,24 @@ namespace ZigZag.Services
 {
 	public class GameStateService : MonoBehaviour
 	{
-		private readonly SignalBus _signalBus;
+		private SignalBus _signalBus;
 
 		public GameState State { get; private set; }
 
-		public GameStateService(SignalBus signalBus)
+		[Inject]
+		private void Construct(SignalBus signalBus)
 		{
 			_signalBus = signalBus;
+		}
+
+		private void Start()
+		{
 			ChangeState(GameState.Init);
 			ChangeState(GameState.Pause);
+		}
+
+		public GameStateService(SignalBus signalBus)
+		{
 		}
 
 		/// <summary>

@@ -4,6 +4,7 @@ using Zenject;
 using ZigZag.Abstracts;
 using ZigZag.Infrastructure;
 using ZigZag.Services;
+using ZigZag.UI;
 
 namespace ZigZag
 {
@@ -11,6 +12,9 @@ namespace ZigZag
 	{
 		[SerializeField]
 		private Button _newGameButton;
+
+		[SerializeField]
+		private GameObject _content;
 
 		private SignalBus _signalBus;
 
@@ -23,12 +27,8 @@ namespace ZigZag
 			_stateService = stateService;
 
 			_newGameButton.onClick.AddListener(OnNewGameClick);
-			_signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
-		}
 
-		private void OnNewGameClick()
-		{
-			_stateService.ChangeState(GameState.Reset);
+			_signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
 		}
 
 		private void OnGameStateChanged(GameStateSignal signal)
@@ -37,15 +37,21 @@ namespace ZigZag
 			{
 				case GameState.Failed:
 					{
-						gameObject.SetActive(true);
+						_content.gameObject.SetActive(true);
 						break;
 					}
 				default:
 					{
-						gameObject.SetActive(false);
+						_content.gameObject.SetActive(false);
 						break;
 					}
 			}
+		}
+
+		private void OnNewGameClick()
+		{
+			_stateService.ChangeState(GameState.Reset);
+			_stateService.ChangeState(GameState.Pause);
 		}
 	}
 }
