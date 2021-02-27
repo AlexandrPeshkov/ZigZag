@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using ZigZag.Abstracts;
 using ZigZag.Infrastructure;
+using ZigZag.Services;
 
 namespace ZigZag
 {
 	public class PlatformManager : MonoBehaviour
 	{
-		private const int _platformCapacity = 15;
+		private const int _platformCapacity = 25;
 
 		[SerializeField]
 		private Transform _platformParent;
@@ -16,33 +18,36 @@ namespace ZigZag
 		[SerializeField]
 		private Platform _platformPrefab;
 
-		private LinkedList<Platform> _platforms;
-
-		private float _platformSize;
+		private float _platformWidth;
 
 		private Vector3 _top;
 
 		private Vector3 _left;
 
-		private SignalBus _signalBus;
+		private LinkedList<Platform> _platforms;
+
+		private GameStateService _gameStateService;
+
+		public event Action<Platform> PlatformCreated;
+
+		public event Action<Platform> PlatformPassed;
 
 		[Inject]
-		private void Construct(SignalBus signalBus)
+		private void Construct(GameStateService gameStateService)
 		{
-			_signalBus = signalBus;
+			_gameStateService = gameStateService;
+			_gameStateService.GameStateChanged += OnGameStateChanged;
 
-			_signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
+			_platformWidth = _platformPrefab.GetComponent<MeshFilter>().sharedMesh.bounds.size.x * _platformPrefab.GetComponent<Transform>().localScale.x;
 
-			_platformSize = _platformPrefab.GetComponent<MeshFilter>().sharedMesh.bounds.size.x * _platformPrefab.GetComponent<Transform>().localScale.x;
-
-			_top = Vector3.forward * _platformSize;
-			_left = Vector3.left * _platformSize;
+			_top = Vector3.forward * _platformWidth;
+			_left = Vector3.left * _platformWidth;
 			Init();
 		}
 
-		private void OnGameStateChanged(GameStateSignal signal)
+		private void OnGameStateChanged(GameState state)
 		{
-			switch (signal.GameState)
+			switch (state)
 			{
 				case GameState.Reset:
 					{
@@ -72,7 +77,7 @@ namespace ZigZag
 				platform._transform.position = Vector3.zero + _top * i;
 				var node = _platforms.AddLast(platform);
 				platform.SpehreIsOut += OnSphereOut;
-				platform.LinkPlatform(node);
+				platform.InitPlatform(node, 1);
 			}
 		}
 
@@ -85,30 +90,41 @@ namespace ZigZag
 			platform._transform.position = lastPlatform._transform.position + platformShift;
 
 			platform.SpehreIsOut += OnSphereOut;
+			platform.SphereIn += OnSphereIn;
 
 			var node = _platforms.AddLast(platform);
-			platform.LinkPlatform(node);
+			platform.InitPlatform(node, 1);
+
+			PlatformCreated?.Invoke(platform);
 		}
 
 		/// <summary>
 		/// Сфера покинула платформу
 		/// </summary>
-		/// <param name="lastPlatform"></param>
-		private void OnSphereOut(Platform lastPlatform)
+		/// <param name="platform">Платформа, которую прошла сфера</param>
+		private void OnSphereOut(Platform platform)
 		{
-			_signalBus.Fire(new PlatformCompleteSignal(1));
+			Platform previousPlatform = platform.Node.Previous?.Previous?.Value;
 
-			Platform previousPlatform = lastPlatform.Node.Previous?.Previous?.Value;
-
-			if (previousPlatform != null && previousPlatform != lastPlatform)
+			if (previousPlatform != null && previousPlatform != platform)
 			{
 				previousPlatform.SpehreIsOut -= OnSphereOut;
+				previousPlatform.SphereIn -= OnSphereIn;
 
 				_platforms.Remove(previousPlatform);
 				previousPlatform.Fall();
 
 				GeneratePlatform(_platforms.Last.Value);
 			}
+		}
+
+		/// <summary>
+		/// Сфера покинула платформу
+		/// </summary>
+		/// <param name="platform">Платформа на которую вошла сфера</param>
+		private void OnSphereIn(Platform platform)
+		{
+			PlatformPassed?.Invoke(platform);
 		}
 
 		private void OnGameReset()

@@ -5,71 +5,83 @@ using Zenject;
 
 namespace ZigZag
 {
-    public class Platform : MonoBehaviour
-    {
-        private const float _minHeight = -30;
+	public class Platform : MonoBehaviour
+	{
+		/// <summary>
+		/// Высота исчезания
+		/// </summary>
+		private const float _faidHeight = -30;
 
-        private bool _visited = false;
+		private bool _visited = false;
 
-        [SerializeField]
-        private Material _avtiveMaterial;
+		[SerializeField]
+		private Material _avtiveMaterial;
 
-        [SerializeField]
-        private Material _normalMaterial;
+		[SerializeField]
+		private Material _normalMaterial;
 
-        [SerializeField]
-        private MeshRenderer _meshRenderer;
+		[SerializeField]
+		private MeshRenderer _meshRenderer;
 
-        public Transform _transform;
+		public Transform _transform;
 
-        public event Action<Platform> SpehreIsOut;
+		public event Action<Platform> SpehreIsOut;
 
-        public LinkedListNode<Platform> Node { get; private set; }
+		public event Action<Platform> SphereIn;
 
-        public void LinkPlatform(LinkedListNode<Platform> node)
-        {
-            Node = node;
-        }
+		public LinkedListNode<Platform> Node { get; private set; }
 
-        public void Fall()
-        {
-            gameObject.AddComponent<Rigidbody>();
-        }
+		/// <summary>
+		/// Очки ценности
+		/// </summary>
+		public int Points { get; private set; }
 
-        private void Update()
-        {
-            if (_transform.position.y <= _minHeight)
-            {
-                DestroyImmediate(gameObject);
-            }
-        }
+		public void InitPlatform(LinkedListNode<Platform> node, int cost)
+		{
+			Node = node;
+			Points = cost;
+		}
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (_visited == false)
-            {
-                HighLight();
-            }
-        }
+		public void Fall()
+		{
+			gameObject.AddComponent<Rigidbody>();
+		}
 
-        private void OnCollisionExit(Collision collision)
-        {
-            if (_visited == false)
-            {
-                SpehreIsOut?.Invoke(this);
-            }
-            _visited = true;
-            UnHighLight();
-        }
+		private void Update()
+		{
+			if (_transform.position.y <= _faidHeight)
+			{
+				DestroyImmediate(gameObject);
+			}
+		}
 
-        private void UnHighLight()
-        {
-            _meshRenderer.material = _normalMaterial;
-        }
+		private void OnCollisionEnter(Collision collision)
+		{
+			if (_visited == false)
+			{
+				HighLight();
+				SphereIn?.Invoke(this);
+			}
+		}
 
-        private void HighLight()
-        {
-            _meshRenderer.material = _avtiveMaterial;
-        }
-    }
+		private void OnCollisionExit(Collision collision)
+		{
+			if (_visited == false)
+			{
+				SpehreIsOut?.Invoke(this);
+			}
+			_visited = true;
+			UnHighLight();
+		}
+
+		private void UnHighLight()
+		{
+			_meshRenderer.material = _normalMaterial;
+		}
+
+		private void HighLight()
+		{
+			_meshRenderer.material = _avtiveMaterial;
+		}
+	}
 }

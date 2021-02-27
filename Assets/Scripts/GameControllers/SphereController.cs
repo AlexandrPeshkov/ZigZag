@@ -16,24 +16,35 @@ namespace ZigZag
 
 		private Vector3 _currentDirection = Vector3.forward;
 
+		private Vector3 _startPosition;
+
 		[SerializeField]
 		private Transform _transform;
 
 		[SerializeField]
 		private Rigidbody _rigidbody;
 
+		[SerializeField]
+		private Platform _platformPrefab;
+
 		private GameStateService _gameStateService;
 
 		private InputHandler _inputHandler;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, GameStateService gameState, InputHandler inputHandler)
+		private void Construct(GameStateService gameState, InputHandler inputHandler)
 		{
 			_gameStateService = gameState;
 			_inputHandler = inputHandler;
 
-			signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
+			gameState.GameStateChanged += OnGameStateChanged;
+
 			_inputHandler.LeftMouseButtonUp += OnLeftMouseButtonUp;
+
+			var platformHeight = _platformPrefab.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * _platformPrefab.GetComponent<Transform>().localScale.y * 0.5f;
+			var sphereRadius = this.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * this.GetComponent<Transform>().localScale.y * 0.5f;
+			var y = platformHeight + sphereRadius;
+			_startPosition = new Vector3(0, platformHeight + sphereRadius, 0);
 		}
 
 		private void OnLeftMouseButtonUp()
@@ -44,9 +55,9 @@ namespace ZigZag
 			}
 		}
 
-		private void OnGameStateChanged(GameStateSignal signal)
+		private void OnGameStateChanged(GameState state)
 		{
-			switch (signal.GameState)
+			switch (state)
 			{
 				case GameState.Pause:
 					{
@@ -61,7 +72,7 @@ namespace ZigZag
 			}
 		}
 
-		private void Update()
+		private void FixedUpdate()
 		{
 			if (_gameStateService.State == GameState.Run)
 			{
@@ -100,7 +111,7 @@ namespace ZigZag
 		private void OnGameReset()
 		{
 			_rigidbody.constraints = RigidbodyConstraints.None;
-			_transform.position = new Vector3(0, 5f, 0);
+			_transform.position = _startPosition;
 			_transform.rotation = Quaternion.Euler(Vector3.zero);
 
 			_currentDirection = Vector3.forward;

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Zenject;
 using ZigZag.Abstracts;
 using ZigZag.Infrastructure;
+using ZigZag.Services;
 
 namespace ZigZag.UI
 {
@@ -22,14 +23,12 @@ namespace ZigZag.UI
 
 		private ScoreService _scoreService;
 
-		private SignalBus _signalBus;
-
 		[Inject]
-		private void Construct(ScoreService scoreService, SignalBus signalBus)
+		private void Construct(ScoreService scoreService, GameStateService gameStateService)
 		{
 			_scoreService = scoreService;
-			_signalBus = signalBus;
-			_signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
+
+			gameStateService.GameStateChanged += OnGameStateChanged;
 		}
 
 		public void Show()
@@ -41,9 +40,9 @@ namespace ZigZag.UI
 			gameObject.SetActive(true);
 		}
 
-		private void OnGameStateChanged(GameStateSignal signal)
+		private void OnGameStateChanged(GameState state)
 		{
-			switch (signal.GameState)
+			switch (state)
 			{
 				case GameState.Failed:
 					{

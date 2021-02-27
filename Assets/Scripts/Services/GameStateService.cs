@@ -1,20 +1,22 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zenject;
 using ZigZag.Abstracts;
-using ZigZag.Infrastructure;
 
 namespace ZigZag.Services
 {
 	public class GameStateService : MonoBehaviour
 	{
-		private SignalBus _signalBus;
-
 		public GameState State { get; private set; }
 
+		/// <summary>
+		/// Смена игрового состояния
+		/// </summary>
+		public event Action<GameState> GameStateChanged;
+
 		[Inject]
-		private void Construct(SignalBus signalBus)
+		private void Construct()
 		{
-			_signalBus = signalBus;
 		}
 
 		private void Start()
@@ -34,7 +36,7 @@ namespace ZigZag.Services
 		public void ChangeState(GameState gameState)
 		{
 			State = gameState;
-			_signalBus.Fire(new GameStateSignal(State));
+			GameStateChanged?.Invoke(State);
 		}
 	}
 }
