@@ -24,6 +24,11 @@ namespace ZigZag.UI
 
 		private InputHandler _inputHandler;
 
+		/// <summary>
+		/// Показ отсчета запущен
+		/// </summary>
+		private bool _countDownStarted = false;
+
 		[Inject]
 		private void Construct(SignalBus signalBus, GameStateService stateService, InputHandler inputHandler)
 		{
@@ -39,8 +44,9 @@ namespace ZigZag.UI
 			if (_stateService.State == GameState.Pause)
 			{
 				//произошел тап
-				if (Input.GetMouseButtonUp(0))
+				if (Input.GetMouseButtonUp(0) && _countDownStarted == false)
 				{
+					_countDownStarted = true;
 					_content.SetActive(false);
 
 					StartCoroutine(ShowCountdown());
@@ -77,8 +83,7 @@ namespace ZigZag.UI
 			}
 
 			_stateService.ChangeState(GameState.Run);
-
-			//_countdownElems[_countdownElems.Count - 1].SetActive(false);
+			_countDownStarted = false;
 		}
 	}
 }

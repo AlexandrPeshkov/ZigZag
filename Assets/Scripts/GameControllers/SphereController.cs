@@ -72,14 +72,19 @@ namespace ZigZag
 				else
 				{
 					Move();
+					//Rotate();
 				}
 			}
 		}
 
-		//TODO Разобраться с вращением сферы
 		private void Move()
 		{
 			_transform.position += _velocity * Time.deltaTime * _currentDirection;
+		}
+
+		//TODO Разобраться с вращением сферы
+		private void Rotate()
+		{
 			if (_currentDirection == Vector3.forward)
 			{
 				//_transform.rotation = Quaternion.Euler(_transform.rotation.eulerAngles + _angleSpeed * Time.deltaTime * Vector3.right);
