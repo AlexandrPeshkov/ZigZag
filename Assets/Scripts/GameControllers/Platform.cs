@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using Zenject;
 
 namespace ZigZag
 {
-	public class Platform : MonoBehaviour
+	public class Platform : MonoBehaviour, IPoolable<int, IMemoryPool>, IDisposable
 	{
 		/// <summary>
 		/// Высота исчезания
@@ -23,36 +23,23 @@ namespace ZigZag
 		[SerializeField]
 		private MeshRenderer _meshRenderer;
 
+		private ScoreService _scoreService;
+
+		private IMemoryPool _memoryPool;
+
 		public Transform _transform;
 
 		public event Action<Platform> SpehreIsOut;
-
-		public event Action<Platform> SphereIn;
-
-		public LinkedListNode<Platform> Node { get; private set; }
 
 		/// <summary>
 		/// Очки ценности
 		/// </summary>
 		public int Points { get; private set; }
 
-		public void InitPlatform(LinkedListNode<Platform> node, int cost)
+		[Inject]
+		private void Construct(ScoreService scoreService)
 		{
-			Node = node;
-			Points = cost;
-		}
-
-		public void Fall()
-		{
-			gameObject.AddComponent<Rigidbody>();
-		}
-
-		private void Update()
-		{
-			if (_transform.position.y <= _faidHeight)
-			{
-				DestroyImmediate(gameObject);
-			}
+			_scoreService = scoreService;
 		}
 
 		private void OnCollisionEnter(Collision collision)
@@ -60,7 +47,7 @@ namespace ZigZag
 			if (_visited == false)
 			{
 				HighLight();
-				SphereIn?.Invoke(this);
+				_scoreService.AddPoints(Points);
 			}
 		}
 
@@ -83,5 +70,29 @@ namespace ZigZag
 		{
 			_meshRenderer.material = _avtiveMaterial;
 		}
+
+		#region IPoolable
+
+		public void OnSpawned(int points, IMemoryPool pool)
+		{
+			_memoryPool = pool;
+			Points = points;
+		}
+
+		public void OnDespawned()
+		{
+			_memoryPool = null;
+			Points = 0;
+			_visited = false;
+		}
+
+		public void Dispose()
+		{
+			_memoryPool.Despawn(this);
+		}
+
+		#endregion IPoolable
+
+		public class Factory : PlaceholderFactory<int, Platform> { }
 	}
 }

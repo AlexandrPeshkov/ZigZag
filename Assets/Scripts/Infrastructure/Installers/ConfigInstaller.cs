@@ -9,8 +9,8 @@ namespace ZigZag.Infrastructure
 		/// <summary>
 		/// Конфигурация ZigZag
 		/// </summary>
-		[Header("Настройки бонусов")]
-		public BonusSettings _appConfig;
+
+		public GameConfig _appConfig;
 
 		public override void InstallBindings()
 		{

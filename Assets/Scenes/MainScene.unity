@@ -3632,11 +3632,14 @@ MonoBehaviour:
   _soundManagerPrefab: {fileID: 2766129913994471928, guid: 9ec68654e145f0b44baa69184a811d04, type: 3}
   _sphereControllerPrefab: {fileID: 9210976552914207460, guid: 678213a2a4774c64c8d113517dd174d1, type: 3}
   _bonusManagerPrefab: {fileID: 8867464438196395549, guid: 0065fe7890837394eb893e58d0ed7964, type: 3}
+  _speedGemPrefab: {fileID: 8564487759360246429, guid: 6d1bf4cd64a6dc149b3898cb26892fbb, type: 3}
+  _pointsGemPrefab: {fileID: 8714334261294929025, guid: 625d72099e4545e4297e8c589ec49d45, type: 3}
   _finishGameDialog: {fileID: 1474061325}
   _newRecordMessage: {fileID: 1139310596}
   _scoreView: {fileID: 1399811124}
   _pauseView: {fileID: 417689381}
   _recordTable: {fileID: 1933492071}
+  _platform: {fileID: 283246711961910555, guid: 82bcafbd4fb5faf41affdf088183c71d, type: 3}
 --- !u!1 &2019277643
 GameObject:
   m_ObjectHideFlags: 0

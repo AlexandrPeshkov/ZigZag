@@ -43,5 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3df6583f3392944b75f006947a7309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pointBonusPrefab: {fileID: 6377383498984474777, guid: 625d72099e4545e4297e8c589ec49d45, type: 3}
+  _gemPrefabs:
+  - {fileID: 8011584157370781748, guid: 625d72099e4545e4297e8c589ec49d45, type: 3}
+  - {fileID: 7257843943549663127, guid: 6d1bf4cd64a6dc149b3898cb26892fbb, type: 3}
   _platformPrefab: {fileID: 283246711961910555, guid: 82bcafbd4fb5faf41affdf088183c71d, type: 3}

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 using ZigZag.Abstracts;
-using ZigZag.Infrastructure;
 using ZigZag.Services;
 
 namespace ZigZag
@@ -36,7 +34,7 @@ namespace ZigZag
 
 		public event Action<int> ScoreChanged;
 
-		public ScoreService(GameStateService gameStateService, PlatformManager platformManager)
+		public ScoreService(GameStateService gameStateService)
 		{
 			ScoreTable = new List<int>(Enumerable.Repeat(0, _highScoreSize));
 
@@ -44,8 +42,6 @@ namespace ZigZag
 			//ClearRecordTable();
 #endif
 			gameStateService.GameStateChanged += OnGameStateChanged;
-
-			platformManager.PlatformPassed += OnPlatformPassed;
 
 			ReadScoreTable();
 		}
@@ -79,18 +75,13 @@ namespace ZigZag
 			ResetScore();
 		}
 
-		private void OnPlatformPassed(Platform platform)
-		{
-			AddPoints(platform.Points);
-		}
-
 		private void ResetScore()
 		{
 			CurrentScore = 0;
 			_isNewRecordSession = false;
 		}
 
-		private void AddPoints(int points)
+		public void AddPoints(int points)
 		{
 			CurrentScore += points;
 			ScoreChanged?.Invoke(CurrentScore);

@@ -13,6 +13,10 @@ namespace ZigZag
 		private void Construct(SphereController sphereController)
 		{
 			_sphere = sphereController;
+		}
+
+		private void Start()
+		{
 			Vector3 delta = _sphere.transform.position - this.transform.position;
 			_delta = new Vector3(Mathf.Abs(delta.x), Mathf.Abs(delta.y), -Mathf.Abs(delta.z));
 		}
@@ -22,6 +26,9 @@ namespace ZigZag
 			FollowToSphere();
 		}
 
+		/// <summary>
+		/// Следовать за сферой
+		/// </summary>
 		private void FollowToSphere()
 		{
 			this.transform.position = _sphere.transform.position + _delta;

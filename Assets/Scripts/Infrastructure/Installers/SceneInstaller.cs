@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 using ZigZag.Services;
 using ZigZag.UI;
@@ -23,6 +24,13 @@ namespace ZigZag.Infrastructure
 		[SerializeField]
 		private BonusManager _bonusManagerPrefab;
 
+		[Header("Gems")]
+		[SerializeField]
+		private SpeedGem _speedGemPrefab;
+
+		[SerializeField]
+		private PointsGem _pointsGemPrefab;
+
 		[Header("Scene instans")]
 		[SerializeField]
 		private FinishGameDialog _finishGameDialog;
@@ -39,8 +47,12 @@ namespace ZigZag.Infrastructure
 		[SerializeField]
 		private RecordTable _recordTable;
 
+		[SerializeField]
+		private Platform _platform;
+
 		public override void InstallBindings()
 		{
+			Application.targetFrameRate = 1000;
 			InstallSceneDependencies();
 			BindServices();
 		}
@@ -52,7 +64,10 @@ namespace ZigZag.Infrastructure
 		{
 			Container.Bind<ScoreService>().AsSingle();
 
-			Container.Bind<GameStateService>().FromNewComponentOnNewGameObject().AsSingle();
+			Container.Bind<GamePlayService>().AsSingle();
+
+			//Container.Bind<GameStateService>().FromNewComponentOnNewGameObject().AsSingle();
+			Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
 
 			Container.Bind<InputHandler>().FromNewComponentOnNewGameObject().AsSingle();
 
@@ -66,6 +81,26 @@ namespace ZigZag.Infrastructure
 			Container.Bind<SphereController>().FromComponentInNewPrefab(_sphereControllerPrefab).AsSingle();
 
 			Container.Bind<BonusManager>().FromComponentInNewPrefab(_bonusManagerPrefab).AsSingle().NonLazy();
+
+			var config = Container.Resolve<GameConfig>();
+
+			//Factories
+
+			Container.BindFactory<int, Platform, Platform.Factory>()
+				.FromMonoPoolableMemoryPool<int, Platform>(binder => binder
+					.WithInitialSize(config.PlatformPoolSize)
+					.FromComponentInNewPrefab(_platform)
+					.UnderTransform(cntx => cntx.Container.Resolve<PlatformManager>().transform));
+
+			Container.BindFactory<Platform, SpeedGem, SpeedGem, BonusGemFactory<SpeedGem>>().FromComponentInNewPrefab(_speedGemPrefab);
+			Container.BindFactory<Platform, PointsGem, PointsGem, BonusGemFactory<PointsGem>>().FromComponentInNewPrefab(_pointsGemPrefab);
+
+			//Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
+			//Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();
+
+			Container.Bind<SpeedEffect>().FromFactory<SpeedEffectFactory>().AsTransient();
+
+			Container.Bind<PointsEffect>().FromFactory<PointsEffectFactory>().AsTransient();
 		}
 
 		/// <summary>

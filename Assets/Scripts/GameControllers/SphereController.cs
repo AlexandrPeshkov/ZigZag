@@ -10,10 +10,6 @@ namespace ZigZag
 	{
 		private const float _fallingHeight = -5f;
 
-		private const float _velocity = 5f;
-
-		private const float _angularVelocity = 10;
-
 		private Vector3 _currentDirection = Vector3.forward;
 
 		private Vector3 _startPosition;
@@ -31,11 +27,14 @@ namespace ZigZag
 
 		private InputHandler _inputHandler;
 
+		private GamePlayService _gamePlay;
+
 		[Inject]
-		private void Construct(GameStateService gameState, InputHandler inputHandler)
+		private void Construct(GameStateService gameState, InputHandler inputHandler, GamePlayService gamePlay)
 		{
 			_gameStateService = gameState;
 			_inputHandler = inputHandler;
+			_gamePlay = gamePlay;
 
 			gameState.GameStateChanged += OnGameStateChanged;
 
@@ -90,22 +89,7 @@ namespace ZigZag
 
 		private void Move()
 		{
-			_transform.position += _velocity * Time.deltaTime * _currentDirection;
-		}
-
-		//TODO Разобраться с вращением сферы
-		private void Rotate()
-		{
-			if (_currentDirection == Vector3.forward)
-			{
-				//_transform.rotation = Quaternion.Euler(_transform.rotation.eulerAngles + _angleSpeed * Time.deltaTime * Vector3.right);
-				_transform.Rotate(_angularVelocity * Time.deltaTime * Vector3.right);
-			}
-			else
-			{
-				//_transform.localEulerAngles += _angleSpeed * Time.deltaTime * Vector3.forward;
-				transform.Rotate(_angularVelocity * Time.deltaTime * Vector3.back);
-			}
+			_transform.position += _gamePlay.Speed * Time.deltaTime * _currentDirection;
 		}
 
 		private void OnGameReset()

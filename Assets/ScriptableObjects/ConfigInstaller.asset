@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: ConfigInstaller
   m_EditorClassIdentifier: 
   _appConfig:
-    PointBonusProbability: 0
+    PointBonusProbability: 0.2
+    PlatformPoolSize: 35
+    BonusPoolSize: 0

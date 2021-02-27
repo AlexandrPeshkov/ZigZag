@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 using ZigZag.Abstracts;
@@ -10,10 +11,12 @@ namespace ZigZag
 {
 	public class PlatformManager : MonoBehaviour
 	{
-		private const int _platformCapacity = 25;
+		private const int _basePointCost = 1;
 
-		[SerializeField]
-		private Transform _platformParent;
+		/// <summary>
+		/// Длина стартовой прямой линни из платформ
+		/// </summary>
+		private const int _firstLineLength = 4;
 
 		[SerializeField]
 		private Platform _platformPrefab;
@@ -24,24 +27,30 @@ namespace ZigZag
 
 		private Vector3 _left;
 
-		private LinkedList<Platform> _platforms;
+		private List<Platform> _platforms;
 
 		private GameStateService _gameStateService;
 
+		private GameConfig _gameConfig;
+
+		private Platform.Factory _platformFactory;
+
 		public event Action<Platform> PlatformCreated;
 
-		public event Action<Platform> PlatformPassed;
-
 		[Inject]
-		private void Construct(GameStateService gameStateService)
+		private void Construct(GameStateService gameStateService, Platform.Factory platformFactory, GameConfig gameConfig)
 		{
 			_gameStateService = gameStateService;
+			_platformFactory = platformFactory;
+			_gameConfig = gameConfig;
+
 			_gameStateService.GameStateChanged += OnGameStateChanged;
 
 			_platformWidth = _platformPrefab.GetComponent<MeshFilter>().sharedMesh.bounds.size.x * _platformPrefab.GetComponent<Transform>().localScale.x;
 
 			_top = Vector3.forward * _platformWidth;
 			_left = Vector3.left * _platformWidth;
+
 			Init();
 		}
 
@@ -60,40 +69,45 @@ namespace ZigZag
 
 		private void Init()
 		{
-			_platforms = new LinkedList<Platform>();
+			_platforms = new List<Platform>();
 			FirstLinePlatforms();
-
-			for (var i = 1; i < _platformCapacity; i++)
+			for (var i = _firstLineLength; i < _gameConfig.PlatformPoolSize; i++)
 			{
-				GeneratePlatform(_platforms.Last.Value);
+				GeneratePlatform(_platforms.Last()); ;
 			}
 		}
 
+		/// <summary>
+		/// Прямая линия начальныъх платформ
+		/// </summary>
 		private void FirstLinePlatforms()
 		{
-			for (var i = 0; i < 4; i++)
+			for (var i = 0; i < _firstLineLength; i++)
 			{
-				Platform platform = Instantiate(_platformPrefab, _platformParent, true);
+				Platform platform = _platformFactory.Create(_basePointCost);
+
 				platform._transform.position = Vector3.zero + _top * i;
-				var node = _platforms.AddLast(platform);
+
+				_platforms.Add(platform);
 				platform.SpehreIsOut += OnSphereOut;
-				platform.InitPlatform(node, 1);
 			}
 		}
 
+		/// <summary>
+		/// Создать платформу
+		/// </summary>
+		/// <param name="lastPlatform"></param>
 		private void GeneratePlatform(Platform lastPlatform)
 		{
-			Platform platform = Instantiate(_platformPrefab, _platformParent, true);
+			Platform platform = _platformFactory.Create(_basePointCost);
 
 			Vector3 platformShift = UnityEngine.Random.Range(0, 2) == 0 ? _top : _left;
 
 			platform._transform.position = lastPlatform._transform.position + platformShift;
 
 			platform.SpehreIsOut += OnSphereOut;
-			platform.SphereIn += OnSphereIn;
 
-			var node = _platforms.AddLast(platform);
-			platform.InitPlatform(node, 1);
+			_platforms.Add(platform);
 
 			PlatformCreated?.Invoke(platform);
 		}
@@ -101,37 +115,35 @@ namespace ZigZag
 		/// <summary>
 		/// Сфера покинула платформу
 		/// </summary>
-		/// <param name="platform">Платформа, которую прошла сфера</param>
-		private void OnSphereOut(Platform platform)
+		/// <param name="outedPlatform">Платформа, которую прошла сфера</param>
+		private void OnSphereOut(Platform outedPlatform)
 		{
-			Platform previousPlatform = platform.Node.Previous?.Previous?.Value;
+			int tailStep = 15;
 
-			if (previousPlatform != null && previousPlatform != platform)
+			int index = _platforms.IndexOf(outedPlatform);
+			int fadeablePlatormIndex = index - tailStep;
+
+			//Скрыть платформу и вернуть в пул на {tailStep} позади от текущекй
+
+			if (index > 0 && fadeablePlatormIndex > 0)
 			{
-				previousPlatform.SpehreIsOut -= OnSphereOut;
-				previousPlatform.SphereIn -= OnSphereIn;
+				var fadeablePlatform = _platforms[fadeablePlatormIndex];
 
-				_platforms.Remove(previousPlatform);
-				previousPlatform.Fall();
+				fadeablePlatform.SpehreIsOut -= OnSphereOut;
 
-				GeneratePlatform(_platforms.Last.Value);
+				_platforms.Remove(fadeablePlatform);
+
+				fadeablePlatform.Dispose();
 			}
-		}
-
-		/// <summary>
-		/// Сфера покинула платформу
-		/// </summary>
-		/// <param name="platform">Платформа на которую вошла сфера</param>
-		private void OnSphereIn(Platform platform)
-		{
-			PlatformPassed?.Invoke(platform);
+			GeneratePlatform(_platforms.Last());
 		}
 
 		private void OnGameReset()
 		{
 			foreach (var platform in _platforms)
 			{
-				DestroyImmediate(platform.gameObject);
+				platform.Dispose();
+				//DestroyImmediate(platform.gameObject);
 			}
 			Init();
 		}
