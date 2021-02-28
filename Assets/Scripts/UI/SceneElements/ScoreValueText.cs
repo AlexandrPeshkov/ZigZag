@@ -4,7 +4,7 @@ using Zenject;
 
 namespace ZigZag.UI
 {
-	public class ScoreTextView : MonoBehaviour
+	public class ScoreValueText : MonoBehaviour
 	{
 		[SerializeField]
 		private Text _scoreValue;

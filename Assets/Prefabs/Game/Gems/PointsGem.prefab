@@ -26,6 +26,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e87bdb07b86ff014782e61854ac78a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sound: {fileID: 8300000, guid: 3e18274e8d790c5489ddb5b54b16c39a, type: 3}
+  _textPrefab: {fileID: 3142107599844392541, guid: 2aee3e144825cdf4e98d30352115ee91, type: 3}
 --- !u!1001 &8011148209111715798
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Zenject;
+using ZigZag.Infrastructure;
 
 namespace ZigZag
 {
@@ -9,19 +10,28 @@ namespace ZigZag
 	/// </summary>
 	public abstract class BaseGem<TEffect> : MonoBehaviour, IGem where TEffect : class, IEffect
 	{
+		[SerializeField]
+		private AudioClip _sound;
+
+		private SoundManager _soundManager;
+
 		protected TEffect _effect;
 
 		public event Action<IGem> Collected;
 
 		[Inject]
-		private void Construct(IEffectFactory<TEffect> effectFactory)
+		private void Construct(IEffectFactory<TEffect> effectFactory, SoundManager soundManager)
 		{
 			_effect = effectFactory.Create();
+			_soundManager = soundManager;
 		}
 
 		private void OnTriggerEnter(Collider other)
 		{
-			CollectReaction();
+			if (other.GetComponent<SphereController>() != null)
+			{
+				CollectReaction();
+			}
 		}
 
 		/// <summary>
@@ -31,6 +41,7 @@ namespace ZigZag
 		{
 			Collected?.Invoke(this);
 			_effect.Apply();
+			_soundManager.PlayEffectSound(_sound);
 		}
 
 		public void Dispose()

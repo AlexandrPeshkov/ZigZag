@@ -5,10 +5,16 @@ using ZigZag.Services;
 
 namespace ZigZag.Infrastructure
 {
+	/// <summary>
+	/// Сервис управление звуками
+	/// </summary>
 	public class SoundManager : MonoBehaviour
 	{
 		[SerializeField]
-		private AudioSource _backgroundSound;
+		private AudioSource _backgroundAudioSource;
+
+		[SerializeField]
+		private AudioSource _effectAudioSource;
 
 		[Inject]
 		private void Construct(GameStateService stateService)
@@ -35,12 +41,18 @@ namespace ZigZag.Infrastructure
 
 		private void PlayBackground()
 		{
-			_backgroundSound.Play();
+			_backgroundAudioSource.Play();
 		}
 
 		private void StopBackground()
 		{
-			_backgroundSound.Stop();
+			_backgroundAudioSource.Stop();
+		}
+
+		public void PlayEffectSound(AudioClip effectAudio)
+		{
+			_effectAudioSource.clip = effectAudio;
+			_effectAudioSource.Play();
 		}
 	}
 }

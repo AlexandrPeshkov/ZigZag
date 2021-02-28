@@ -4,7 +4,10 @@ using Zenject;
 
 namespace ZigZag
 {
-	public class ScoreRecordText : MonoBehaviour
+	/// <summary>
+	/// Табличка наовый рекорд
+	/// </summary>
+	public class NewRecordText : MonoBehaviour
 	{
 		[SerializeField]
 		private GameObject _content;

@@ -2,7 +2,10 @@
 
 namespace ZigZag
 {
-	public class SpeedEffect : IEffect
+	/// <summary>
+	/// Эффект ускорения
+	/// </summary>
+	public sealed class SpeedEffect : IEffect
 	{
 		/// <summary>
 		/// Бонус к скорости

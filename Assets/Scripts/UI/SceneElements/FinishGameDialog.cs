@@ -11,8 +11,8 @@ namespace ZigZag
 		[SerializeField]
 		private Button _newGameButton;
 
-		[SerializeField]
-		private GameObject _content;
+		//[SerializeField]
+		//private GameObject _content;
 
 		private GameStateService _stateService;
 
@@ -32,12 +32,15 @@ namespace ZigZag
 			{
 				case GameState.Failed:
 					{
-						_content.gameObject.SetActive(true);
+						gameObject.SetActive(true);
 						break;
 					}
 				default:
 					{
-						_content.gameObject.SetActive(false);
+						if (gameObject.activeSelf == true)
+						{
+							gameObject.SetActive(false);
+						}
 						break;
 					}
 			}

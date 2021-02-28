@@ -36,10 +36,10 @@ namespace ZigZag.Infrastructure
 		private FinishGameDialog _finishGameDialog;
 
 		[SerializeField]
-		private ScoreRecordText _newRecordMessage;
+		private NewRecordText _newRecordMessage;
 
 		[SerializeField]
-		private ScoreTextView _scoreView;
+		private ScoreValueText _scoreView;
 
 		[SerializeField]
 		private PauseView _pauseView;
@@ -49,6 +49,12 @@ namespace ZigZag.Infrastructure
 
 		[SerializeField]
 		private Platform _platform;
+
+		[SerializeField]
+		private Camera _mainCamera;
+
+		[SerializeField]
+		private Canvas _mainCanvas;
 
 		[Inject]
 		private GameConfig _gameConfig;
@@ -104,6 +110,8 @@ namespace ZigZag.Infrastructure
 
 			Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
 			Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();
+
+			//UI
 		}
 
 		/// <summary>
@@ -120,6 +128,10 @@ namespace ZigZag.Infrastructure
 			Container.BindInstance(_pauseView).AsSingle();
 
 			Container.BindInstance(_recordTable).AsSingle();
+
+			Container.BindInstance(_mainCamera).WithId(DiConstants._mainCamera).AsSingle();
+
+			Container.BindInstance(_mainCanvas).WithId(DiConstants._mainCanvas).AsSingle();
 		}
 	}
 }

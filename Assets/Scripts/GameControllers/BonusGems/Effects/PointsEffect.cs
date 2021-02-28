@@ -1,20 +1,23 @@
 ﻿namespace ZigZag
 {
-	public class PointsEffect : IEffect
+	/// <summary>
+	/// Эффект бонусных очков
+	/// </summary>
+	public sealed class PointsEffect : IEffect
 	{
 		private readonly ScoreService _scoreService;
 
-		private readonly int _points;
+		public int Points { get; private set; }
 
 		public PointsEffect(ScoreService scoreService, int points)
 		{
 			_scoreService = scoreService;
-			_points = points;
+			Points = points;
 		}
 
 		public void Apply()
 		{
-			_scoreService.AddPoints(_points);
+			_scoreService.AddPoints(Points);
 		}
 	}
 }
