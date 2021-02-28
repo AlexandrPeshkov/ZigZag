@@ -1,30 +1,33 @@
-﻿using UnityEngine;
+﻿using System;
 using Zenject;
 using ZigZag.Abstracts;
-using ZigZag.Infrastructure;
 
 namespace ZigZag.Services
 {
-	public class GameStateService : MonoBehaviour
+	public class GameStateService : IInitializable
 	{
-		private SignalBus _signalBus;
-
 		public GameState State { get; private set; }
 
-		[Inject]
-		private void Construct(SignalBus signalBus)
+		/// <summary>
+		/// Смена игрового состояния
+		/// </summary>
+		public event Action<GameState> GameStateChanged;
+
+		//[Inject]
+		//private void Construct()
+		//{
+		//}
+
+		public void Initialize()
 		{
-			_signalBus = signalBus;
+			Start();
 		}
 
 		private void Start()
 		{
+			//TODO Продумать как запускать приложение не монобехом
 			ChangeState(GameState.Init);
 			ChangeState(GameState.Pause);
-		}
-
-		public GameStateService(SignalBus signalBus)
-		{
 		}
 
 		/// <summary>
@@ -34,7 +37,7 @@ namespace ZigZag.Services
 		public void ChangeState(GameState gameState)
 		{
 			State = gameState;
-			_signalBus.Fire(new GameStateSignal(State));
+			GameStateChanged?.Invoke(State);
 		}
 	}
 }

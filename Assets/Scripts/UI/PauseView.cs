@@ -30,12 +30,12 @@ namespace ZigZag.UI
 		private bool _countDownStarted = false;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, GameStateService stateService, InputHandler inputHandler)
+		private void Construct(GameStateService stateService, InputHandler inputHandler)
 		{
 			_stateService = stateService;
 			_inputHandler = inputHandler;
 
-			signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
+			stateService.GameStateChanged += OnGameStateChanged;
 			_inputHandler.LeftMouseButtonUp += OnLeftMouseButtonUp;
 		}
 
@@ -54,9 +54,9 @@ namespace ZigZag.UI
 			}
 		}
 
-		private void OnGameStateChanged(GameStateSignal signal)
+		private void OnGameStateChanged(GameState state)
 		{
-			switch (signal.GameState)
+			switch (state)
 			{
 				case GameState.Pause:
 					{

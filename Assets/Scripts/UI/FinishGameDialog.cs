@@ -2,9 +2,7 @@
 using UnityEngine.UI;
 using Zenject;
 using ZigZag.Abstracts;
-using ZigZag.Infrastructure;
 using ZigZag.Services;
-using ZigZag.UI;
 
 namespace ZigZag
 {
@@ -16,24 +14,21 @@ namespace ZigZag
 		[SerializeField]
 		private GameObject _content;
 
-		private SignalBus _signalBus;
-
 		private GameStateService _stateService;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, GameStateService stateService)
+		private void Construct(GameStateService stateService)
 		{
-			_signalBus = signalBus;
 			_stateService = stateService;
 
 			_newGameButton.onClick.AddListener(OnNewGameClick);
 
-			_signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
+			stateService.GameStateChanged += OnGameStateChanged;
 		}
 
-		private void OnGameStateChanged(GameStateSignal signal)
+		private void OnGameStateChanged(GameState state)
 		{
-			switch (signal.GameState)
+			switch (state)
 			{
 				case GameState.Failed:
 					{

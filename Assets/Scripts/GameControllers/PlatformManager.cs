@@ -1,48 +1,57 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 using ZigZag.Abstracts;
 using ZigZag.Infrastructure;
+using ZigZag.Services;
 
 namespace ZigZag
 {
 	public class PlatformManager : MonoBehaviour
 	{
-		private const int _platformCapacity = 15;
-
-		[SerializeField]
-		private Transform _platformParent;
+		private const int _basePointCost = 1;
 
 		[SerializeField]
 		private Platform _platformPrefab;
 
-		private LinkedList<Platform> _platforms;
-
-		private float _platformSize;
+		private float _platformWidth;
 
 		private Vector3 _top;
 
 		private Vector3 _left;
 
-		private SignalBus _signalBus;
+		private List<Platform> _platforms;
+
+		private GameStateService _gameStateService;
+
+		private GameConfig _gameConfig;
+
+		private Platform.Factory _platformFactory;
+
+		public event Action<Platform> PlatformCreated;
 
 		[Inject]
-		private void Construct(SignalBus signalBus)
+		private void Construct(GameStateService gameStateService, Platform.Factory platformFactory, GameConfig gameConfig)
 		{
-			_signalBus = signalBus;
+			_gameStateService = gameStateService;
+			_platformFactory = platformFactory;
+			_gameConfig = gameConfig;
 
-			_signalBus.Subscribe<GameStateSignal>(OnGameStateChanged);
+			_gameStateService.GameStateChanged += OnGameStateChanged;
 
-			_platformSize = _platformPrefab.GetComponent<MeshFilter>().sharedMesh.bounds.size.x * _platformPrefab.GetComponent<Transform>().localScale.x;
+			_platformWidth = _platformPrefab.GetComponent<MeshFilter>().sharedMesh.bounds.size.x * _platformPrefab.GetComponent<Transform>().localScale.x;
 
-			_top = Vector3.forward * _platformSize;
-			_left = Vector3.left * _platformSize;
+			_top = Vector3.forward * _platformWidth;
+			_left = Vector3.left * _platformWidth;
+
 			Init();
 		}
 
-		private void OnGameStateChanged(GameStateSignal signal)
+		private void OnGameStateChanged(GameState state)
 		{
-			switch (signal.GameState)
+			switch (state)
 			{
 				case GameState.Reset:
 					{
@@ -55,30 +64,37 @@ namespace ZigZag
 
 		private void Init()
 		{
-			_platforms = new LinkedList<Platform>();
+			_platforms = new List<Platform>();
 			FirstLinePlatforms();
-
-			for (var i = 1; i < _platformCapacity; i++)
+			for (var i = _gameConfig.firstLineLength; i < _gameConfig.PlatformPoolSize; i++)
 			{
-				GeneratePlatform(_platforms.Last.Value);
+				GeneratePlatform(_platforms.Last()); ;
 			}
 		}
 
+		/// <summary>
+		/// Прямая линия начальныъх платформ
+		/// </summary>
 		private void FirstLinePlatforms()
 		{
-			for (var i = 0; i < 4; i++)
+			for (var i = 0; i < _gameConfig.firstLineLength; i++)
 			{
-				Platform platform = Instantiate(_platformPrefab, _platformParent, true);
+				Platform platform = _platformFactory.Create(_basePointCost);
+
 				platform._transform.position = Vector3.zero + _top * i;
-				var node = _platforms.AddLast(platform);
+
+				_platforms.Add(platform);
 				platform.SpehreIsOut += OnSphereOut;
-				platform.LinkPlatform(node);
 			}
 		}
 
+		/// <summary>
+		/// Создать платформу
+		/// </summary>
+		/// <param name="lastPlatform"></param>
 		private void GeneratePlatform(Platform lastPlatform)
 		{
-			Platform platform = Instantiate(_platformPrefab, _platformParent, true);
+			Platform platform = _platformFactory.Create(_basePointCost);
 
 			Vector3 platformShift = UnityEngine.Random.Range(0, 2) == 0 ? _top : _left;
 
@@ -86,36 +102,43 @@ namespace ZigZag
 
 			platform.SpehreIsOut += OnSphereOut;
 
-			var node = _platforms.AddLast(platform);
-			platform.LinkPlatform(node);
+			_platforms.Add(platform);
+
+			PlatformCreated?.Invoke(platform);
 		}
 
 		/// <summary>
 		/// Сфера покинула платформу
 		/// </summary>
-		/// <param name="lastPlatform"></param>
-		private void OnSphereOut(Platform lastPlatform)
+		/// <param name="outedPlatform">Платформа, которую прошла сфера</param>
+		private void OnSphereOut(Platform outedPlatform)
 		{
-			_signalBus.Fire(new PlatformCompleteSignal(1));
+			int tailStep = 15;
 
-			Platform previousPlatform = lastPlatform.Node.Previous?.Previous?.Value;
+			int index = _platforms.IndexOf(outedPlatform);
+			int fadeablePlatormIndex = index - tailStep;
 
-			if (previousPlatform != null && previousPlatform != lastPlatform)
+			//Скрыть платформу и вернуть в пул на {tailStep} позади от текущекй
+
+			if (index > 0 && fadeablePlatormIndex > 0)
 			{
-				previousPlatform.SpehreIsOut -= OnSphereOut;
+				var fadeablePlatform = _platforms[fadeablePlatormIndex];
 
-				_platforms.Remove(previousPlatform);
-				previousPlatform.Fall();
+				fadeablePlatform.SpehreIsOut -= OnSphereOut;
 
-				GeneratePlatform(_platforms.Last.Value);
+				_platforms.Remove(fadeablePlatform);
+
+				fadeablePlatform.Dispose();
 			}
+			GeneratePlatform(_platforms.Last());
 		}
 
 		private void OnGameReset()
 		{
 			foreach (var platform in _platforms)
 			{
-				DestroyImmediate(platform.gameObject);
+				platform.Dispose();
+				//DestroyImmediate(platform.gameObject);
 			}
 			Init();
 		}

@@ -1,75 +1,98 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using Zenject;
 
 namespace ZigZag
 {
-    public class Platform : MonoBehaviour
-    {
-        private const float _minHeight = -30;
+	public class Platform : MonoBehaviour, IPoolable<int, IMemoryPool>, IDisposable
+	{
+		/// <summary>
+		/// Высота исчезания
+		/// </summary>
+		private const float _faidHeight = -30;
 
-        private bool _visited = false;
+		private bool _visited = false;
 
-        [SerializeField]
-        private Material _avtiveMaterial;
+		[SerializeField]
+		private Material _avtiveMaterial;
 
-        [SerializeField]
-        private Material _normalMaterial;
+		[SerializeField]
+		private Material _normalMaterial;
 
-        [SerializeField]
-        private MeshRenderer _meshRenderer;
+		[SerializeField]
+		private MeshRenderer _meshRenderer;
 
-        public Transform _transform;
+		private ScoreService _scoreService;
 
-        public event Action<Platform> SpehreIsOut;
+		private IMemoryPool _memoryPool;
 
-        public LinkedListNode<Platform> Node { get; private set; }
+		public Transform _transform;
 
-        public void LinkPlatform(LinkedListNode<Platform> node)
-        {
-            Node = node;
-        }
+		public event Action<Platform> SpehreIsOut;
 
-        public void Fall()
-        {
-            gameObject.AddComponent<Rigidbody>();
-        }
+		/// <summary>
+		/// Очки ценности
+		/// </summary>
+		public int Points { get; private set; }
 
-        private void Update()
-        {
-            if (_transform.position.y <= _minHeight)
-            {
-                DestroyImmediate(gameObject);
-            }
-        }
+		[Inject]
+		private void Construct(ScoreService scoreService)
+		{
+			_scoreService = scoreService;
+		}
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (_visited == false)
-            {
-                HighLight();
-            }
-        }
+		private void OnCollisionEnter(Collision collision)
+		{
+			if (_visited == false)
+			{
+				HighLight();
+				_scoreService.AddPoints(Points);
+			}
+		}
 
-        private void OnCollisionExit(Collision collision)
-        {
-            if (_visited == false)
-            {
-                SpehreIsOut?.Invoke(this);
-            }
-            _visited = true;
-            UnHighLight();
-        }
+		private void OnCollisionExit(Collision collision)
+		{
+			if (_visited == false)
+			{
+				SpehreIsOut?.Invoke(this);
+			}
+			_visited = true;
+			UnHighLight();
+		}
 
-        private void UnHighLight()
-        {
-            _meshRenderer.material = _normalMaterial;
-        }
+		private void UnHighLight()
+		{
+			_meshRenderer.material = _normalMaterial;
+		}
 
-        private void HighLight()
-        {
-            _meshRenderer.material = _avtiveMaterial;
-        }
-    }
+		private void HighLight()
+		{
+			_meshRenderer.material = _avtiveMaterial;
+		}
+
+		#region IPoolable
+
+		public void OnSpawned(int points, IMemoryPool pool)
+		{
+			_memoryPool = pool;
+			Points = points;
+		}
+
+		public void OnDespawned()
+		{
+			_memoryPool = null;
+			Points = 0;
+			_visited = false;
+		}
+
+		public void Dispose()
+		{
+			_memoryPool.Despawn(this);
+		}
+
+		#endregion IPoolable
+
+		public class Factory : PlaceholderFactory<int, Platform> { }
+	}
 }

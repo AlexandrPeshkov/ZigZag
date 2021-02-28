@@ -1,30 +1,37 @@
 ﻿using UnityEngine;
+using Zenject;
 
 namespace ZigZag
 {
-    public class GameCameraController : MonoBehaviour
-    {
-        [SerializeField]
-        private SphereController _sphere;
+	public class GameCameraController : MonoBehaviour
+	{
+		private SphereController _sphere;
 
-        private Vector3 _delta;
+		private Vector3 _delta;
 
-        private void Awake()
-        {
-            Vector3 delta = _sphere.transform.position - this.transform.position;
-            _delta = new Vector3(Mathf.Abs(delta.x), Mathf.Abs(delta.y), -Mathf.Abs(delta.z));
-        }
+		[Inject]
+		private void Construct(SphereController sphereController)
+		{
+			_sphere = sphereController;
+		}
 
-        private void Update()
-        {
-            FollowToSphere();
-        }
+		private void Start()
+		{
+			Vector3 delta = _sphere.transform.position - this.transform.position;
+			_delta = new Vector3(Mathf.Abs(delta.x), Mathf.Abs(delta.y), -Mathf.Abs(delta.z));
+		}
 
-        private void FollowToSphere()
-        {
-            //-x
-            //+z
-            this.transform.position = _sphere.transform.position + _delta;
-        }
-    }
+		private void FixedUpdate()
+		{
+			FollowToSphere();
+		}
+
+		/// <summary>
+		/// Следовать за сферой
+		/// </summary>
+		private void FollowToSphere()
+		{
+			this.transform.position = _sphere.transform.position + _delta;
+		}
+	}
 }
