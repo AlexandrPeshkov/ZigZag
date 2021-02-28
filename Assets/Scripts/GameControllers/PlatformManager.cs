@@ -13,11 +13,6 @@ namespace ZigZag
 	{
 		private const int _basePointCost = 1;
 
-		/// <summary>
-		/// Длина стартовой прямой линни из платформ
-		/// </summary>
-		private const int _firstLineLength = 4;
-
 		[SerializeField]
 		private Platform _platformPrefab;
 
@@ -71,7 +66,7 @@ namespace ZigZag
 		{
 			_platforms = new List<Platform>();
 			FirstLinePlatforms();
-			for (var i = _firstLineLength; i < _gameConfig.PlatformPoolSize; i++)
+			for (var i = _gameConfig.firstLineLength; i < _gameConfig.PlatformPoolSize; i++)
 			{
 				GeneratePlatform(_platforms.Last()); ;
 			}
@@ -82,7 +77,7 @@ namespace ZigZag
 		/// </summary>
 		private void FirstLinePlatforms()
 		{
-			for (var i = 0; i < _firstLineLength; i++)
+			for (var i = 0; i < _gameConfig.firstLineLength; i++)
 			{
 				Platform platform = _platformFactory.Create(_basePointCost);
 

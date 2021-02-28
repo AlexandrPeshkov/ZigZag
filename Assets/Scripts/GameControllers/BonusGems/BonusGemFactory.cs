@@ -3,32 +3,39 @@ using Zenject;
 
 namespace ZigZag
 {
-	public class BonusGemFactory<TGem, TEffect> : PlaceholderFactory<Platform, TGem, TGem>
+	public class BonusGemFactory<TGem> : PlaceholderFactory<Platform, TGem>
 		where TGem : Component, IGem
-		where TEffect : IEffect
 	{
 		private DiContainer _container;
 
+		private TGem _gemPrefab;
+
 		[Inject]
-		public void Construct(DiContainer container)
+		private void Construct(DiContainer container, TGem gemPrefab)
 		{
 			_container = container;
+			_gemPrefab = gemPrefab;
 		}
 
-		//TODO Фабрика не создает автоматически внутри себя эффект (
-		public override TGem Create(Platform platform, TGem gemPrefab)
+		public override TGem Create(Platform platform)
 		{
-			TGem gem = base.Create(platform, gemPrefab);
-			var effectFactory = _container.Resolve<IEffectFactory<TEffect>>();
+			try
+			{
+				TGem gem = _container.InstantiatePrefabForComponent<TGem>(_gemPrefab);
 
-			var platformY = platform.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * platform.GetComponent<Transform>().localScale.y * 0.5f;
+				var platformY = platform.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * platform.GetComponent<Transform>().localScale.y * 0.5f;
 
-			var pointBonusY = gemPrefab.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * gemPrefab.GetComponent<Transform>().localScale.y;
-			var gemOffset = new Vector3(0, pointBonusY + platformY, 0);
+				var pointBonusY = _gemPrefab.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * _gemPrefab.GetComponent<Transform>().localScale.y;
+				var gemOffset = new Vector3(0, pointBonusY + platformY, 0);
 
-			gem.transform.position = platform.transform.position + gemOffset;
+				gem.transform.position = platform.transform.position + gemOffset;
 
-			return gem;
+				return gem;
+			}
+			catch (System.Exception ex)
+			{
+			}
+			return null;
 		}
 	}
 }

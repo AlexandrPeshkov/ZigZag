@@ -17,7 +17,7 @@
 		{
 			return new SpeedEffect(
 				_baseEffectTime,
-				_baseEffectSpeed * _gamePlay.DifficultyLevel * 0.5f,
+				_baseEffectSpeed * _gamePlay.DifficultyLevel + 3f,
 				_gamePlay
 				);
 		}

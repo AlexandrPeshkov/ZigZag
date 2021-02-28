@@ -12,10 +12,7 @@
 		/// <summary>
 		/// Скорость сферы
 		/// </summary>
-		public float Speed
-		{
-			get => _baseSpeed * DifficultyLevel + _speedBonus;
-		}
+		public float Speed => _baseSpeed * DifficultyLevel + _speedBonus;
 
 		/// <summary>
 		/// Текущая сложность

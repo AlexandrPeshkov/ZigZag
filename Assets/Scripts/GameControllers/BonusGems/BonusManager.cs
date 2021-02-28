@@ -15,8 +15,6 @@ namespace ZigZag
 	/// </summary>
 	public class BonusManager : MonoBehaviour
 	{
-		public List<IGem> _gemPrefabs2;
-
 		[SerializeField]
 		private List<GameObject> _gemPrefabs;
 
@@ -33,6 +31,11 @@ namespace ZigZag
 
 		private List<IGem> _spawnedGems;
 
+		private Dictionary<Type, IFactory> _factoriesCache;
+
+		[SerializeField]
+		private Transform _gemParent;
+
 		[Inject]
 		private void Construct(PlatformManager platformManager,
 			GameConfig gameConfig,
@@ -45,6 +48,7 @@ namespace ZigZag
 			_container = container;
 
 			_spawnedGems = new List<IGem>();
+			_factoriesCache = new Dictionary<Type, IFactory>();
 
 			_gameStateService.GameStateChanged += OnGameStateChanged;
 			_platformManager.PlatformCreated += OnPlatformCreated;
@@ -66,36 +70,61 @@ namespace ZigZag
 		{
 			List<Action<Platform>> spawnActions = new List<Action<Platform>>();
 
-			if (Random.Range(0, 1.01f) >= _gameConfig.PointsBonusProbability)
+			if (Random.Range(0, 1f) >= (1f - _gameConfig.PointsGemChance))
 			{
 				spawnActions.Add(SpawnGem<PointsGem>);
 			}
-			if (Random.Range(0, 1.01f) >= _gameConfig.SpeedBonusProbability)
+			if (Random.Range(0, 1f) >= (1f - _gameConfig.SpeedGemChance))
 			{
 				spawnActions.Add(SpawnGem<SpeedGem>);
 			}
 
-			int actionIndex = Random.Range(0, spawnActions.Count);
-			spawnActions[actionIndex](platform);
+			if (spawnActions.Count > 0)
+			{
+				int actionIndex = Random.Range(0, spawnActions.Count);
+
+				spawnActions[actionIndex](platform);
+			}
 		}
 
+		/// <summary>
+		/// Создать бонусный гем
+		/// </summary>
+		/// <typeparam name="TGem">Тип гема</typeparam>
+		/// <param name="platform">Платформа на которой будет создан гем</param>
 		private void SpawnGem<TGem>(Platform platform) where TGem : Component, IGem
 		{
-			var factory = _container.Resolve<BonusGemFactory<TGem>>();
+			Type factoryType = typeof(BonusGemFactory<TGem>);
+			BonusGemFactory<TGem> factory = null;
+			if (_factoriesCache.TryGetValue(factoryType, out var cachedFactory) == false)
+			{
+				factory = _container.Resolve<BonusGemFactory<TGem>>();
+				_factoriesCache.Add(factoryType, factory);
+			}
+			else
+			{
+				factory = cachedFactory as BonusGemFactory<TGem>;
+			}
 
-			var gemPrefab = _gemPrefabs.Select(x => x.GetComponent<TGem>()).FirstOrDefault(x => x != null);
+			TGem gemPrefab = _gemPrefabs.Select(x => x.GetComponent<TGem>()).FirstOrDefault(x => x != null);
 
 			if (gemPrefab != null && factory != null)
 			{
-				TGem gem = factory.Create(platform, gemPrefab);
-				gem.transform.SetParent(this.transform);
-
+				TGem gem = factory.Create(platform);
+				gem.transform.SetParent(_gemParent);
+				gem.Collected += OnGemCollected;
 				_spawnedGems.Add(gem);
 			}
 			else
 			{
 				Debug.LogError($"Не найдена фабрика или префаб для типа {typeof(TGem).Name}");
 			}
+		}
+
+		private void OnGemCollected(IGem gem)
+		{
+			_spawnedGems.Remove(gem);
+			gem.Dispose();
 		}
 
 		private void ClearBonuses()
@@ -106,6 +135,4 @@ namespace ZigZag
 			}
 		}
 	}
-
-	public class Factory : PlaceholderFactory<IGem> { }
 }

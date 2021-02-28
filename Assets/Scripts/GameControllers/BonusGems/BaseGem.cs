@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zenject;
 
 namespace ZigZag
@@ -6,16 +7,19 @@ namespace ZigZag
 	/// <summary>
 	/// Базовый контроллер гема с эффектом
 	/// </summary>
-	public abstract class BaseGem<TEffect> : MonoBehaviour, IGem where TEffect : IEffect
+	public abstract class BaseGem<TEffect> : MonoBehaviour, IGem where TEffect : class, IEffect
 	{
 		protected TEffect _effect;
 
-		public void BindEffect(IEffect effect)
+		public event Action<IGem> Collected;
+
+		[Inject]
+		private void Construct(IEffectFactory<TEffect> effectFactory)
 		{
-			_effect = effect;
+			_effect = effectFactory.Create();
 		}
 
-		private void OnCollisionEnter(Collision collision)
+		private void OnTriggerEnter(Collider other)
 		{
 			CollectReaction();
 		}
@@ -25,12 +29,16 @@ namespace ZigZag
 		/// </summary>
 		public virtual void CollectReaction()
 		{
+			Collected?.Invoke(this);
 			_effect.Apply();
 		}
 
 		public void Dispose()
 		{
-			DestroyImmediate(this.gameObject);
+			if (this != null && gameObject != null)
+			{
+				Destroy(this.gameObject);
+			}
 		}
 	}
 }

@@ -8,8 +8,14 @@ namespace ZigZag
 	public interface IGem : IDisposable
 
 	{
-		void CollectReaction();
+		/// <summary>
+		/// Гем активирован
+		/// </summary>
+		event Action<IGem> Collected;
 
-		void BindEffect(IEffect effect);
+		/// <summary>
+		/// Реакция на активацию
+		/// </summary>
+		void CollectReaction();
 	}
 }

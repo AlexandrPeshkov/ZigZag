@@ -111,5 +111,4 @@ MonoBehaviour:
   _avtiveMaterial: {fileID: 2100000, guid: 877e58db8a9c4db4385b40690a83aa48, type: 2}
   _normalMaterial: {fileID: 2100000, guid: f46e6518fc743454da72be3c2a28fc0a, type: 2}
   _meshRenderer: {fileID: 2495924556632556358}
-  _rigidbody: {fileID: 0}
   _transform: {fileID: 327639967291038249}

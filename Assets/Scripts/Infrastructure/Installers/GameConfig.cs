@@ -10,15 +10,21 @@ namespace ZigZag.Infrastructure
 	public class GameConfig
 	{
 		[Header("Настройки бонусов")]
-		[Header("Вероятность бонуса очков")]
-		public float PointsBonusProbability;
+		[Tooltip("Вероятность бонуса очков")]
+		[Range(0, 1)]
+		public float PointsGemChance;
 
-		[Header("Вероятность бонуса очков")]
-		public float SpeedBonusProbability;
+		[Tooltip("Вероятность бонуса очков")]
+		[Range(0, 1)]
+		public float SpeedGemChance;
 
 		[Space]
 		[Header("Настройки производительности")]
-		[Header("Размер пула платформ")]
+		[Tooltip("Вероятность бонуса очков")]
 		public int PlatformPoolSize;
+
+		[Tooltip("Длина стартовой прямой линии")]
+		[Min(4)]
+		public int firstLineLength;
 	}
 }

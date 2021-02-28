@@ -8,7 +8,7 @@ namespace ZigZag
 {
 	public class SphereController : MonoBehaviour
 	{
-		private const float _fallingHeight = -5f;
+		private const float _fallingHeight = -2f;
 
 		private Vector3 _currentDirection = Vector3.forward;
 
@@ -28,6 +28,13 @@ namespace ZigZag
 		private InputHandler _inputHandler;
 
 		private GamePlayService _gamePlay;
+
+#if UNITY_EDITOR
+
+		[SerializeField]
+		private float Speed => _gamePlay.Speed;
+
+#endif
 
 		[Inject]
 		private void Construct(GameStateService gameState, InputHandler inputHandler, GamePlayService gamePlay)

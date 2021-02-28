@@ -50,6 +50,9 @@ namespace ZigZag.Infrastructure
 		[SerializeField]
 		private Platform _platform;
 
+		[Inject]
+		private GameConfig _gameConfig;
+
 		public override void InstallBindings()
 		{
 			Application.targetFrameRate = 1000;
@@ -62,16 +65,16 @@ namespace ZigZag.Infrastructure
 		/// </summary>
 		private void BindServices()
 		{
+			//Services
 			Container.Bind<ScoreService>().AsSingle();
 
 			Container.Bind<GamePlayService>().AsSingle();
 
-			//Container.Bind<GameStateService>().FromNewComponentOnNewGameObject().AsSingle();
 			Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
 
 			Container.Bind<InputHandler>().FromNewComponentOnNewGameObject().AsSingle();
 
-			//MonoBehaviours
+			//Game managers
 			Container.Bind<PlatformManager>().FromComponentInNewPrefab(_platformManagerPrefab).AsSingle().NonLazy();
 
 			Container.Bind<SoundManager>().FromComponentInNewPrefab(_soundManagerPrefab).AsSingle().NonLazy();
@@ -82,25 +85,25 @@ namespace ZigZag.Infrastructure
 
 			Container.Bind<BonusManager>().FromComponentInNewPrefab(_bonusManagerPrefab).AsSingle().NonLazy();
 
-			var config = Container.Resolve<GameConfig>();
-
-			//Factories
+			//Memory pool
 
 			Container.BindFactory<int, Platform, Platform.Factory>()
 				.FromMonoPoolableMemoryPool<int, Platform>(binder => binder
-					.WithInitialSize(config.PlatformPoolSize)
+					.WithInitialSize(_gameConfig.PlatformPoolSize)
 					.FromComponentInNewPrefab(_platform)
 					.UnderTransform(cntx => cntx.Container.Resolve<PlatformManager>().transform));
 
-			Container.BindFactory<Platform, SpeedGem, SpeedGem, BonusGemFactory<SpeedGem>>().FromComponentInNewPrefab(_speedGemPrefab);
-			Container.BindFactory<Platform, PointsGem, PointsGem, BonusGemFactory<PointsGem>>().FromComponentInNewPrefab(_pointsGemPrefab);
+			//Bonus gems
+			Container.BindFactory<Platform, SpeedGem, BonusGemFactory<SpeedGem>>()
+				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(SpeedGem), Value = _speedGemPrefab } })
+				.FromComponentInNewPrefab(_speedGemPrefab);
 
-			//Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
-			//Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();
+			Container.BindFactory<Platform, PointsGem, BonusGemFactory<PointsGem>>()
+				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(PointsGem), Value = _pointsGemPrefab } })
+				.FromComponentInNewPrefab(_speedGemPrefab);
 
-			Container.Bind<SpeedEffect>().FromFactory<SpeedEffectFactory>().AsTransient();
-
-			Container.Bind<PointsEffect>().FromFactory<PointsEffectFactory>().AsTransient();
+			Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
+			Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();
 		}
 
 		/// <summary>

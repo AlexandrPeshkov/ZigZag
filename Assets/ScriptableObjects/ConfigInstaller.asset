@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ConfigInstaller
   m_EditorClassIdentifier: 
   _appConfig:
-    PointBonusProbability: 0.2
-    PlatformPoolSize: 35
-    BonusPoolSize: 0
+    PointsGemChance: 0.08
+    SpeedGemChance: 0.09
+    PlatformPoolSize: 10
+    firstLineLength: 4

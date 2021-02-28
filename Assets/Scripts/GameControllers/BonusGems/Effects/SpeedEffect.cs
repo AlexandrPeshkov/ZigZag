@@ -23,18 +23,21 @@ namespace ZigZag
 			_speed = speed;
 		}
 
+		//TODO прошлый эффект еще не отработал и отменяет замедление подобранного
+		//Сделать коротиной или задачей с отменой
 		public void Apply()
 		{
 			ApplySpeed().ConfigureAwait(false).GetAwaiter();
 		}
 
+		//TODO плавное замедление
 		private async Task ApplySpeed()
 		{
 			_gamePlay.ChangeSpeedBonus(_speed);
 
 			await Task.Delay(_seconds * 1000);
 
-			_gamePlay.ChangeSpeedBonus(-_speed);
+			_gamePlay.ChangeSpeedBonus(0);
 		}
 	}
 }

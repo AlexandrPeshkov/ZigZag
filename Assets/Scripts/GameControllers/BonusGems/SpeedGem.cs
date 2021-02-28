@@ -1,7 +1,7 @@
 ﻿namespace ZigZag
 {
 	/// <summary>
-	/// Бонус скорости
+	/// Гем онуса скорости
 	/// </summary>
 	public class SpeedGem : BaseGem<SpeedEffect>
 	{
