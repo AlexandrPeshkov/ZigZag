@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITTY_EDITOR
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
@@ -43,3 +44,4 @@ public class RgbmCubedSkyboxInspector : MaterialEditor
         }
     }
 }
+#endif

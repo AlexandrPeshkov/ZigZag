@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITTY_EDITOR
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
@@ -34,7 +35,7 @@ public class GradientSkyboxInspector : MaterialEditor
             {
                 var rp = dp.floatValue * Mathf.Deg2Rad;
                 var ry = dy.floatValue * Mathf.Deg2Rad;
-                
+
                 var upVector = new Vector4 (
                     Mathf.Sin (rp) * Mathf.Sin (ry),
                     Mathf.Cos (rp),
@@ -48,3 +49,4 @@ public class GradientSkyboxInspector : MaterialEditor
         }
     }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITTY_EDITOR
+using UnityEngine;
 using UnityEditor;
 
 public class HorizonWithSunSkyboxInspector : MaterialEditor
@@ -64,7 +65,7 @@ public class HorizonWithSunSkyboxInspector : MaterialEditor
             {
                 var raz = az.floatValue * Mathf.Deg2Rad;
                 var ral = al.floatValue * Mathf.Deg2Rad;
-                
+
                 var upVector = new Vector4 (
                     Mathf.Cos (ral) * Mathf.Sin (raz),
                     Mathf.Sin (ral),
@@ -78,3 +79,4 @@ public class HorizonWithSunSkyboxInspector : MaterialEditor
         }
     }
 }
+#endif
