@@ -55,9 +55,9 @@ namespace ZigZag
 						OnGameFailed();
 						break;
 					}
-				case GameState.Reset:
+				case GameState.StartNewGame:
 					{
-						OnGameRestarted();
+						ResetScore();
 						break;
 					}
 				default: break;
@@ -68,11 +68,6 @@ namespace ZigZag
 		{
 			ScoreTable.Add(CurrentScore);
 			WriteScoreTable();
-		}
-
-		private void OnGameRestarted()
-		{
-			ResetScore();
 		}
 
 		private void ResetScore()
@@ -102,7 +97,6 @@ namespace ZigZag
 		{
 			for (var i = 0; i < _highScoreSize; i++)
 			{
-				//work after Start()
 				var scoreValue = PlayerPrefs.GetInt($"{_highScoreKey}{i}", -1);
 				if (scoreValue > 0)
 				{

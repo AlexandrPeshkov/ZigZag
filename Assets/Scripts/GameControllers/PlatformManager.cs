@@ -24,8 +24,10 @@ namespace ZigZag
 
 		private List<Platform> _platforms;
 
-		private Platform _currentPlatform;
+		public Platform CurrentPlatform { get; set; }
+
 		private Platform _prevPlatform;
+
 		private Platform _nextPlatform;
 
 		private GameStateService _gameStateService;
@@ -57,9 +59,9 @@ namespace ZigZag
 		{
 			switch (state)
 			{
-				case GameState.Reset:
+				case GameState.StartNewGame:
 					{
-						OnGameReset();
+						OnNewGameStarted();
 						break;
 					}
 				default: break;
@@ -69,7 +71,7 @@ namespace ZigZag
 		private void Init()
 		{
 			_platforms = new List<Platform>();
-			_currentPlatform = null;
+			CurrentPlatform = null;
 			_prevPlatform = null;
 			_nextPlatform = null;
 
@@ -140,7 +142,7 @@ namespace ZigZag
 		/// <param name="platform">Активная платформа</param>
 		private void OnSphereIn(Platform platform)
 		{
-			_currentPlatform = platform;
+			CurrentPlatform = platform;
 
 			var index = _platforms.IndexOf(platform);
 
@@ -160,7 +162,7 @@ namespace ZigZag
 			}
 		}
 
-		private void OnGameReset()
+		private void OnNewGameStarted()
 		{
 			foreach (var platform in _platforms)
 			{
@@ -177,7 +179,7 @@ namespace ZigZag
 		public bool IsInPlatforms(Vector2 spherePos)
 		{
 			return (_prevPlatform?.TopRect.Contains(spherePos) == true)
-			|| (_currentPlatform?.TopRect.Contains(spherePos) == true)
+			|| (CurrentPlatform?.TopRect.Contains(spherePos) == true)
 			 || (_nextPlatform?.TopRect.Contains(spherePos) == true);
 		}
 	}

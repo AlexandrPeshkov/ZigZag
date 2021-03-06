@@ -37,11 +37,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3685972109138430180, guid: f75dd0b93dde9f0459ece571833a8433, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 3685972109138430180, guid: f75dd0b93dde9f0459ece571833a8433, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3685972109138430180, guid: f75dd0b93dde9f0459ece571833a8433, type: 3}
       propertyPath: m_LocalPosition.x
@@ -109,11 +109,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3685972110223475329, guid: f75dd0b93dde9f0459ece571833a8433, type: 3}
       propertyPath: m_FontData.m_BestFit
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3685972110223475329, guid: f75dd0b93dde9f0459ece571833a8433, type: 3}
       propertyPath: m_FontData.m_FontSize
-      value: 30
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685972110223475329, guid: f75dd0b93dde9f0459ece571833a8433, type: 3}
+      propertyPath: m_FontData.m_FontStyle
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f75dd0b93dde9f0459ece571833a8433, type: 3}

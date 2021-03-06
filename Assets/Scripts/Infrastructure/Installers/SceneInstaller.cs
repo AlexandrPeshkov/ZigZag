@@ -42,7 +42,10 @@ namespace ZigZag.Infrastructure
 		private NewRecordText _newRecordMessage;
 
 		[SerializeField]
-		private ScoreValueText _scoreView;
+		private ScoreValueView _scoreView;
+
+		[SerializeField]
+		private LifeValueView _lifesView;
 
 		[SerializeField]
 		private PauseView _pauseView;
@@ -134,6 +137,8 @@ namespace ZigZag.Infrastructure
 			Container.BindInstance(_newRecordMessage).AsSingle();
 
 			Container.BindInstance(_scoreView).AsSingle();
+
+			Container.BindInstance(_lifesView).AsSingle();
 
 			Container.BindInstance(_pauseView).AsSingle();
 

@@ -26,6 +26,11 @@
 		Failing,
 
 		/// <summary>
+		/// Восстановлене игры
+		/// </summary>
+		Restore,
+
+		/// <summary>
 		/// Остановка геймплея (шарик упал)
 		/// </summary>
 		Failed,
@@ -33,6 +38,6 @@
 		/// <summary>
 		/// Перезапуск игры
 		/// </summary>
-		Reset
+		StartNewGame
 	}
 }

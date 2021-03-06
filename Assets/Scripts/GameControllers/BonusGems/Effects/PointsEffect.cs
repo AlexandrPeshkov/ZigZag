@@ -11,7 +11,7 @@
 
 		public EffectLifecycle EffectLifecycle => EffectLifecycle.Instantaneous;
 
-		public string Text => _points.ToString();
+		public string Text => $"+{_points}";
 
 		public PointsEffect(ScoreService scoreService, int points)
 		{

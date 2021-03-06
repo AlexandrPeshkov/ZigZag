@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _appConfig:
     PointsGemChance: 0
-    SpeedGemChance: 0.13
-    LifeGemChance: 0.947
+    SpeedGemChance: 0
+    LifeGemChance: 1
     PlatformPoolSize: 5
     firstLineLength: 4

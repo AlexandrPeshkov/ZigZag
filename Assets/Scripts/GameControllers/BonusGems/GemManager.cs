@@ -54,7 +54,7 @@ namespace ZigZag
 		{
 			switch (state)
 			{
-				case GameState.Reset:
+				case GameState.StartNewGame:
 					{
 						ClearBonuses();
 						break;

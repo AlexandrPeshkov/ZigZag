@@ -72,12 +72,17 @@ namespace ZigZag
 			{
 				case GameState.Pause:
 					{
-						OnGameReset();
+						OnGamePause();
 						break;
 					}
 				case GameState.Failed:
 					{
 						OnGameFailed();
+						break;
+					}
+				case GameState.Restore:
+					{
+						OnGameRestore();
 						break;
 					}
 			}
@@ -125,7 +130,7 @@ namespace ZigZag
 			_transform.position += _gamePlay.Speed * Time.deltaTime * _currentDirection;
 		}
 
-		private void OnGameReset()
+		private void OnGamePause()
 		{
 			_rigidbody.constraints = RigidbodyConstraints.FreezePositionY;
 
@@ -138,6 +143,12 @@ namespace ZigZag
 		private void OnGameFailed()
 		{
 			_rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+		}
+
+		private void OnGameRestore()
+		{
+			_transform.position = _platformManager.CurrentPlatform._transform.position + _startPosition;
+			_gameStateService.ChangeState(GameState.Run);
 		}
 	}
 }

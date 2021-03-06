@@ -1,4 +1,6 @@
-﻿namespace ZigZag
+﻿using System;
+
+namespace ZigZag
 {
 	/// <summary>
 	/// Управление параметрами геймплея
@@ -23,6 +25,11 @@
 		/// Доп.жизни
 		/// </summary>
 		public int Lifes { get; private set; }
+
+		/// <summary>
+		/// Число жизней измененео
+		/// </summary>
+		public event Action<int> LifesChanged;
 
 		public GamePlayService()
 		{
@@ -49,11 +56,13 @@
 		public void AddLife()
 		{
 			Lifes++;
+			LifesChanged?.Invoke(Lifes);
 		}
 
 		public void UseLife()
 		{
 			Lifes--;
+			LifesChanged?.Invoke(Lifes);
 		}
 	}
 }

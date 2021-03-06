@@ -53,7 +53,7 @@ namespace ZigZag.UI
 			if (_stateService.State == GameState.Pause)
 			{
 				//произошел тап
-				if (Input.GetMouseButtonUp(0) && _countDownStarted == false)
+				if (_countDownStarted == false)
 				{
 					_countDownStarted = true;
 					_content.SetActive(false);
