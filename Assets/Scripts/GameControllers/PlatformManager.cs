@@ -24,6 +24,10 @@ namespace ZigZag
 
 		private List<Platform> _platforms;
 
+		private Platform _currentPlatform;
+		private Platform _prevPlatform;
+		private Platform _nextPlatform;
+
 		private GameStateService _gameStateService;
 
 		private GameConfig _gameConfig;
@@ -65,26 +69,14 @@ namespace ZigZag
 		private void Init()
 		{
 			_platforms = new List<Platform>();
-			FirstLinePlatforms();
-			for (var i = _gameConfig.firstLineLength; i < _gameConfig.PlatformPoolSize; i++)
+			_currentPlatform = null;
+			_prevPlatform = null;
+			_nextPlatform = null;
+
+			for (var i = 0; i < _gameConfig.PlatformPoolSize; i++)
 			{
-				GeneratePlatform(_platforms.Last()); ;
-			}
-		}
-
-		/// <summary>
-		/// Прямая линия начальныъх платформ
-		/// </summary>
-		private void FirstLinePlatforms()
-		{
-			for (var i = 0; i < _gameConfig.firstLineLength; i++)
-			{
-				Platform platform = _platformFactory.Create(_basePointCost);
-
-				platform._transform.position = Vector3.zero + _top * i;
-
-				_platforms.Add(platform);
-				platform.SpehreIsOut += OnSphereOut;
+				bool isFirstLine = i < _gameConfig.firstLineLength;
+				GeneratePlatform(_platforms.LastOrDefault(), isFirstLine);
 			}
 		}
 
@@ -92,18 +84,27 @@ namespace ZigZag
 		/// Создать платформу
 		/// </summary>
 		/// <param name="lastPlatform"></param>
-		private void GeneratePlatform(Platform lastPlatform)
+		private void GeneratePlatform(Platform lastPlatform, bool isFirstLine = false)
 		{
-			Platform platform = _platformFactory.Create(_basePointCost);
-
 			Vector3 platformShift = UnityEngine.Random.Range(0, 2) == 0 ? _top : _left;
 
-			platform._transform.position = lastPlatform._transform.position + platformShift;
+			Vector3 platformPos;
+			if (isFirstLine)
+			{
+				platformPos = _top * _platforms.Count;
+			}
+			else
+			{
+				platformPos = lastPlatform._transform.position + platformShift;
+			}
 
-			platform.SpehreIsOut += OnSphereOut;
+			Platform platform = _platformFactory.Create(_basePointCost, platformPos);
+
+			platform.SphereOut += OnSphereOut;
+			platform.SphereIn += OnSphereIn;
 
 			_platforms.Add(platform);
-
+			platform.name = $"Platform {_platforms.Count}";
 			PlatformCreated?.Invoke(platform);
 		}
 
@@ -118,14 +119,14 @@ namespace ZigZag
 			int index = _platforms.IndexOf(outedPlatform);
 			int fadeablePlatormIndex = index - tailStep;
 
-			//Скрыть платформу и вернуть в пул на {tailStep} позади от текущекй
+			//Скрыть платформу и вернуть в пул если на {tailStep} позади от текущекй
 
 			if (index > 0 && fadeablePlatormIndex > 0)
 			{
 				var fadeablePlatform = _platforms[fadeablePlatormIndex];
 
-				fadeablePlatform.SpehreIsOut -= OnSphereOut;
-
+				fadeablePlatform.SphereOut -= OnSphereOut;
+				fadeablePlatform.SphereIn -= OnSphereIn;
 				_platforms.Remove(fadeablePlatform);
 
 				fadeablePlatform.Dispose();
@@ -133,14 +134,51 @@ namespace ZigZag
 			GeneratePlatform(_platforms.Last());
 		}
 
+		/// <summary>
+		/// Сфера вошла на платформу
+		/// </summary>
+		/// <param name="platform">Активная платформа</param>
+		private void OnSphereIn(Platform platform)
+		{
+			_currentPlatform = platform;
+
+			var index = _platforms.IndexOf(platform);
+
+			if (index > -1)
+			{
+				var nextIndex = index + 1;
+				if (nextIndex < _platforms.Count - 1)
+				{
+					_nextPlatform = _platforms[nextIndex];
+				}
+
+				var prevIndex = index - 1;
+				if (prevIndex >= 0)
+				{
+					_prevPlatform = _platforms[prevIndex];
+				}
+			}
+		}
+
 		private void OnGameReset()
 		{
 			foreach (var platform in _platforms)
 			{
 				platform.Dispose();
-				//DestroyImmediate(platform.gameObject);
 			}
 			Init();
+		}
+
+		/// <summary>
+		/// Проверка положения сферы по границам платформ
+		/// </summary>
+		/// <param name="spherePos">Позиция в плоскости x-z</param>
+		/// <returns></returns>
+		public bool IsInPlatforms(Vector2 spherePos)
+		{
+			return (_prevPlatform?.TopRect.Contains(spherePos) == true)
+			|| (_currentPlatform?.TopRect.Contains(spherePos) == true)
+			 || (_nextPlatform?.TopRect.Contains(spherePos) == true);
 		}
 	}
 }

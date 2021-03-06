@@ -87,14 +87,14 @@ namespace ZigZag.Infrastructure
 
 			Container.Bind<GameCameraController>().FromNewComponentOn(Camera.main.gameObject).AsSingle().NonLazy();
 
-			Container.Bind<SphereController>().FromComponentInNewPrefab(_sphereControllerPrefab).AsSingle();
+			Container.Bind<SphereController>().FromComponentInNewPrefab(_sphereControllerPrefab).WithGameObjectName(SphereController._objectName).AsSingle();
 
 			Container.Bind<BonusManager>().FromComponentInNewPrefab(_bonusManagerPrefab).AsSingle().NonLazy();
 
 			//Memory pool
 
-			Container.BindFactory<int, Platform, Platform.Factory>()
-				.FromMonoPoolableMemoryPool<int, Platform>(binder => binder
+			Container.BindFactory<int, Vector3, Platform, Platform.Factory>()
+				.FromMonoPoolableMemoryPool<int, Vector3, Platform>(binder => binder
 					.WithInitialSize(_gameConfig.PlatformPoolSize)
 					.FromComponentInNewPrefab(_platform)
 					.UnderTransform(cntx => cntx.Container.Resolve<PlatformManager>().transform));

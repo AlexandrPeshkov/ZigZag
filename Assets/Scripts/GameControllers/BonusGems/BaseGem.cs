@@ -28,7 +28,7 @@ namespace ZigZag
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.GetComponent<SphereController>() != null)
+			if (other.gameObject.name == SphereController._objectName)
 			{
 				CollectReaction();
 			}

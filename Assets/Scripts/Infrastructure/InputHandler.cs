@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ZigZag.Infrastructure
 {
+	/// <summary>
+	/// Ресивер пользовательского ввода
+	/// </summary>
 	public class InputHandler : MonoBehaviour
 	{
 		public event Action LeftMouseButtonUp;

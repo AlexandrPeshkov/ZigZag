@@ -21,6 +21,11 @@
 		Run,
 
 		/// <summary>
+		/// Прерывание игры
+		/// </summary>
+		Failing,
+
+		/// <summary>
 		/// Остановка геймплея (шарик упал)
 		/// </summary>
 		Failed,

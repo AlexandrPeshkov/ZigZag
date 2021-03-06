@@ -11,6 +11,15 @@ namespace ZigZag.UI
 {
 	public class PauseView : MonoBehaviour
 	{
+		private const float _countDownSpeed =
+#if UNITY_EDITOR
+			0.3f;
+
+#else
+
+			1f;
+#endif
+
 		private GameStateService _stateService;
 
 		[SerializeField]
@@ -77,7 +86,7 @@ namespace ZigZag.UI
 			{
 				_countdownElems[i]?.SetActive(true);
 
-				yield return new WaitForSecondsRealtime(0.7f);
+				yield return new WaitForSecondsRealtime(_countDownSpeed);
 
 				_countdownElems[i]?.SetActive(false);
 			}
