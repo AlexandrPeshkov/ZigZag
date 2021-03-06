@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using ZigZag.Abstracts;
@@ -109,7 +108,7 @@ namespace ZigZag
 
 			while (t <= 1f)
 			{
-				_transform.position = GeometryUtils.Parabola(startPos, endPos, _fallingHeight, t);
+				_transform.position = GeometryUtils.PointOnParabola(startPos, endPos, _fallingHeight, t);
 				t += Time.deltaTime * 1f;
 				yield return null;
 			}

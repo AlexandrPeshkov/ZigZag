@@ -4,7 +4,7 @@
 	{
 		private readonly GamePlayService _gamePlay;
 
-		private const int _baseEffectTime = 5;
+		private const int _baseEffectTime = 1;
 
 		private const float _baseEffectSpeed = 1f;
 

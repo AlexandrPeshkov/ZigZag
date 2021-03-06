@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace ZigZag
 {
@@ -10,27 +11,41 @@ namespace ZigZag
 		/// <summary>
 		/// Бонус к скорости
 		/// </summary>
-		private float _speed;
+		private readonly float _speed;
 
 		/// <summary>
 		/// Время действия
 		/// </summary>
-		private int _seconds;
+		private readonly int _seconds;
 
-		private GamePlayService _gamePlay;
+		private readonly GamePlayService _gamePlay;
+
+		private readonly CancellationToken _cancellationToken;
+
+		private readonly CancellationTokenSource _tokenSource;
+
+		public EffectLifecycle EffectLifecycle => EffectLifecycle.Temporary;
+
+		public string Text => "Speed up!";
 
 		public SpeedEffect(int seconds, float speed, GamePlayService gamePlay)
 		{
 			_gamePlay = gamePlay;
 			_seconds = seconds;
 			_speed = speed;
+
+			_tokenSource = new CancellationTokenSource();
+			_cancellationToken = _tokenSource.Token;
 		}
 
-		//TODO прошлый эффект еще не отработал и отменяет замедление подобранного
-		//Сделать коротиной или задачей с отменой
 		public void Apply()
 		{
-			ApplySpeed().ConfigureAwait(false).GetAwaiter();
+			Task.Run(ApplySpeed, _cancellationToken).ConfigureAwait(false).GetAwaiter();
+		}
+
+		public void Cancel()
+		{
+			_tokenSource.Cancel();
 		}
 
 		//TODO плавное замедление
@@ -40,6 +55,10 @@ namespace ZigZag
 
 			await Task.Delay(_seconds * 1000);
 
+			if (_cancellationToken.IsCancellationRequested)
+			{
+				_cancellationToken.ThrowIfCancellationRequested();
+			}
 			_gamePlay.ChangeSpeedBonus(0);
 		}
 	}

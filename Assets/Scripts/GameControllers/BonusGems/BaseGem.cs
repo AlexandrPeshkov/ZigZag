@@ -2,6 +2,7 @@
 using UnityEngine;
 using Zenject;
 using ZigZag.Infrastructure;
+using ZigZag.UI;
 
 namespace ZigZag
 {
@@ -13,17 +14,26 @@ namespace ZigZag
 		[SerializeField]
 		private AudioClip _sound;
 
+		/// <summary>
+		/// Префаб текста эффекта при активации гема
+		/// </summary>
+		[SerializeField]
+		protected FadedText _textPrefab;
+
 		private SoundManager _soundManager;
 
-		protected TEffect _effect;
+		protected EffectManager _effectManager;
+
+		protected DiContainer _container;
 
 		public event Action<IGem> Collected;
 
 		[Inject]
-		private void Construct(IEffectFactory<TEffect> effectFactory, SoundManager soundManager)
+		private void Construct(EffectManager effectManager, SoundManager soundManager, DiContainer container)
 		{
-			_effect = effectFactory.Create();
+			_effectManager = effectManager;
 			_soundManager = soundManager;
+			_container = container;
 		}
 
 		private void OnTriggerEnter(Collider other)
@@ -40,8 +50,13 @@ namespace ZigZag
 		public virtual void CollectReaction()
 		{
 			Collected?.Invoke(this);
-			_effect.Apply();
+
+			TEffect effect = _effectManager.ApplyEffect<TEffect>();
 			_soundManager.PlayEffectSound(_sound);
+
+			FadedText text = _container.InstantiatePrefabForComponent<FadedText>(_textPrefab);
+
+			text.Show(this.transform.position, $"+{effect.Text}");
 		}
 
 		public void Dispose()

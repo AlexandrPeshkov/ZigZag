@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using Zenject;
 
@@ -8,11 +7,6 @@ namespace ZigZag
 	[RequireComponent(typeof(MeshFilter))]
 	public class Platform : MonoBehaviour, IPoolable<int, Vector3, IMemoryPool>, IDisposable
 	{
-		/// <summary>
-		/// Высота исчезания
-		/// </summary>
-		private const float _faidHeight = -30;
-
 		private bool _visited = false;
 
 		[SerializeField]

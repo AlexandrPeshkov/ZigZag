@@ -94,16 +94,16 @@ namespace ZigZag
 		/// <param name="platform">Платформа на которой будет создан гем</param>
 		private void SpawnGem<TGem>(Platform platform) where TGem : Component, IGem
 		{
-			Type factoryType = typeof(BonusGemFactory<TGem>);
-			BonusGemFactory<TGem> factory = null;
+			Type factoryType = typeof(GemFactory<TGem>);
+			GemFactory<TGem> factory = null;
 			if (_factoriesCache.TryGetValue(factoryType, out var cachedFactory) == false)
 			{
-				factory = _container.Resolve<BonusGemFactory<TGem>>();
+				factory = _container.Resolve<GemFactory<TGem>>();
 				_factoriesCache.Add(factoryType, factory);
 			}
 			else
 			{
-				factory = cachedFactory as BonusGemFactory<TGem>;
+				factory = cachedFactory as GemFactory<TGem>;
 			}
 
 			TGem gemPrefab = _gemPrefabs.Select(x => x.GetComponent<TGem>()).FirstOrDefault(x => x != null);

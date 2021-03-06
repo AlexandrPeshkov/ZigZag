@@ -99,12 +99,14 @@ namespace ZigZag.Infrastructure
 					.FromComponentInNewPrefab(_platform)
 					.UnderTransform(cntx => cntx.Container.Resolve<PlatformManager>().transform));
 
-			//Bonus gems
-			Container.BindFactory<Platform, SpeedGem, BonusGemFactory<SpeedGem>>()
+			//Gems and effects
+			Container.Bind<EffectManager>().AsSingle();
+
+			Container.BindFactory<Platform, SpeedGem, GemFactory<SpeedGem>>()
 				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(SpeedGem), Value = _speedGemPrefab } })
 				.FromComponentInNewPrefab(_speedGemPrefab);
 
-			Container.BindFactory<Platform, PointsGem, BonusGemFactory<PointsGem>>()
+			Container.BindFactory<Platform, PointsGem, GemFactory<PointsGem>>()
 				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(PointsGem), Value = _pointsGemPrefab } })
 				.FromComponentInNewPrefab(_speedGemPrefab);
 

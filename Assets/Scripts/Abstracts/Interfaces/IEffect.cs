@@ -8,6 +8,21 @@
 		/// <summary>
 		/// Применить
 		/// </summary>
-		public void Apply();
+		void Apply();
+
+		/// <summary>
+		/// Отменить
+		/// </summary>
+		void Cancel();
+
+		/// <summary>
+		/// Тип жизненного цикла
+		/// </summary>
+		EffectLifecycle EffectLifecycle { get; }
+
+		/// <summary>
+		/// Текст активации
+		/// </summary>
+		string Text { get; }
 	}
 }

@@ -3,7 +3,7 @@ using Zenject;
 
 namespace ZigZag
 {
-	public class BonusGemFactory<TGem> : PlaceholderFactory<Platform, TGem>
+	public class GemFactory<TGem> : PlaceholderFactory<Platform, TGem>
 		where TGem : Component, IGem
 	{
 		private DiContainer _container;
