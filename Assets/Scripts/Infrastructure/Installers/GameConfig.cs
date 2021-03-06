@@ -18,6 +18,10 @@ namespace ZigZag.Infrastructure
 		[Range(0, 1)]
 		public float SpeedGemChance;
 
+		[Tooltip("Вероятность бонуса жизней")]
+		[Range(0, 1)]
+		public float LifeGemChance;
+
 		[Space]
 		[Header("Настройки производительности")]
 		[Tooltip("Вероятность бонуса очков")]

@@ -17,7 +17,12 @@
 		/// <summary>
 		/// Текущая сложность
 		/// </summary>
-		public int DifficultyLevel { get; set; }
+		public int DifficultyLevel { get; private set; }
+
+		/// <summary>
+		/// Доп.жизни
+		/// </summary>
+		public int Lifes { get; private set; }
 
 		public GamePlayService()
 		{
@@ -39,6 +44,16 @@
 		public void IncreaseDifficulty()
 		{
 			DifficultyLevel++;
+		}
+
+		public void AddLife()
+		{
+			Lifes++;
+		}
+
+		public void UseLife()
+		{
+			Lifes--;
 		}
 	}
 }

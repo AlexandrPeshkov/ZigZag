@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Zenject;
 using ZigZag.Abstracts;
@@ -13,11 +12,8 @@ namespace ZigZag
 	/// <summary>
 	/// Управление бонусами
 	/// </summary>
-	public class BonusManager : MonoBehaviour
+	public class GemManager : MonoBehaviour
 	{
-		[SerializeField]
-		private List<GameObject> _gemPrefabs;
-
 		[SerializeField]
 		private Platform _platformPrefab;
 
@@ -78,6 +74,10 @@ namespace ZigZag
 			{
 				spawnActions.Add(SpawnGem<SpeedGem>);
 			}
+			if (Random.Range(0, 1f) >= (1f - _gameConfig.LifeGemChance))
+			{
+				spawnActions.Add(SpawnGem<LifeGem>);
+			}
 
 			if (spawnActions.Count > 0)
 			{
@@ -106,9 +106,7 @@ namespace ZigZag
 				factory = cachedFactory as GemFactory<TGem>;
 			}
 
-			TGem gemPrefab = _gemPrefabs.Select(x => x.GetComponent<TGem>()).FirstOrDefault(x => x != null);
-
-			if (gemPrefab != null && factory != null)
+			if (factory != null)
 			{
 				TGem gem = factory.Create(platform);
 				gem.transform.SetParent(_gemParent);
@@ -117,7 +115,7 @@ namespace ZigZag
 			}
 			else
 			{
-				Debug.LogError($"Не найдена фабрика или префаб для типа {typeof(TGem).Name}");
+				Debug.LogError($"Не найдена фабрика для типа {typeof(TGem).Name}");
 			}
 		}
 

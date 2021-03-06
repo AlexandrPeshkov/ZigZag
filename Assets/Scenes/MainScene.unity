@@ -832,6 +832,7 @@ MonoBehaviour:
   _bonusManagerPrefab: {fileID: 8867464438196395549, guid: 0065fe7890837394eb893e58d0ed7964, type: 3}
   _speedGemPrefab: {fileID: 8564487759360246429, guid: 6d1bf4cd64a6dc149b3898cb26892fbb, type: 3}
   _pointsGemPrefab: {fileID: 8714334261294929025, guid: 625d72099e4545e4297e8c589ec49d45, type: 3}
+  _lifeGemPrefab: {fileID: 325909261, guid: 19374f6df9dfb1143ae853d8ea145284, type: 3}
   _finishGameDialog: {fileID: 1972676783}
   _newRecordMessage: {fileID: 1357962151}
   _scoreView: {fileID: 1399811124}

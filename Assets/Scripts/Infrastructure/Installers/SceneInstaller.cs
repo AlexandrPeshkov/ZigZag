@@ -22,7 +22,7 @@ namespace ZigZag.Infrastructure
 		private SphereController _sphereControllerPrefab;
 
 		[SerializeField]
-		private BonusManager _bonusManagerPrefab;
+		private GemManager _bonusManagerPrefab;
 
 		[Header("Gems")]
 		[SerializeField]
@@ -30,6 +30,9 @@ namespace ZigZag.Infrastructure
 
 		[SerializeField]
 		private PointsGem _pointsGemPrefab;
+
+		[SerializeField]
+		private LifeGem _lifeGemPrefab;
 
 		[Header("Scene instans")]
 		[SerializeField]
@@ -89,7 +92,7 @@ namespace ZigZag.Infrastructure
 
 			Container.Bind<SphereController>().FromComponentInNewPrefab(_sphereControllerPrefab).WithGameObjectName(SphereController._objectName).AsSingle();
 
-			Container.Bind<BonusManager>().FromComponentInNewPrefab(_bonusManagerPrefab).AsSingle().NonLazy();
+			Container.Bind<GemManager>().FromComponentInNewPrefab(_bonusManagerPrefab).AsSingle().NonLazy();
 
 			//Memory pool
 
@@ -108,10 +111,15 @@ namespace ZigZag.Infrastructure
 
 			Container.BindFactory<Platform, PointsGem, GemFactory<PointsGem>>()
 				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(PointsGem), Value = _pointsGemPrefab } })
-				.FromComponentInNewPrefab(_speedGemPrefab);
+				.FromComponentInNewPrefab(_pointsGemPrefab);
+
+			Container.BindFactory<Platform, LifeGem, GemFactory<LifeGem>>()
+				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(LifeGem), Value = _lifeGemPrefab } })
+				.FromComponentInNewPrefab(_lifeGemPrefab);
 
 			Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
 			Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();
+			Container.Bind<IEffectFactory<LifeEffect>>().To<LifeEffectFactory>().AsSingle();
 
 			//UI
 		}

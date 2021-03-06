@@ -56,7 +56,7 @@ namespace ZigZag
 
 			FadedText text = _container.InstantiatePrefabForComponent<FadedText>(_textPrefab);
 
-			text.Show(this.transform.position, $"+{effect.Text}");
+			text.Show(this.transform.position, effect.Text);
 		}
 
 		public void Dispose()
