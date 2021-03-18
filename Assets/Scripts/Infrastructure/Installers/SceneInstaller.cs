@@ -67,7 +67,6 @@ namespace ZigZag.Infrastructure
 
 		public override void InstallBindings()
 		{
-			Application.targetFrameRate = 1000;
 			InstallSceneDependencies();
 			BindServices();
 		}
@@ -81,6 +80,8 @@ namespace ZigZag.Infrastructure
 			Container.Bind<ScoreService>().AsSingle();
 
 			Container.Bind<GamePlayService>().AsSingle();
+
+			Container.Bind<PlayerPrefsStorage>().AsSingle();
 
 			Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
 
@@ -123,8 +124,6 @@ namespace ZigZag.Infrastructure
 			Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
 			Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();
 			Container.Bind<IEffectFactory<LifeEffect>>().To<LifeEffectFactory>().AsSingle();
-
-			//UI
 		}
 
 		/// <summary>

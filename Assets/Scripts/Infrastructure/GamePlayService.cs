@@ -11,6 +11,8 @@ namespace ZigZag
 
 		private float _speedBonus;
 
+		private readonly PlayerPrefsStorage _prefsStorage;
+
 		/// <summary>
 		/// Скорость сферы
 		/// </summary>
@@ -31,9 +33,12 @@ namespace ZigZag
 		/// </summary>
 		public event Action<int> LifesChanged;
 
-		public GamePlayService()
+		public GamePlayService(PlayerPrefsStorage prefsStorage)
 		{
+			_prefsStorage = prefsStorage;
 			DifficultyLevel = 1;
+
+			Lifes = _prefsStorage.ReadLifes();
 		}
 
 		/// <summary>
@@ -56,12 +61,14 @@ namespace ZigZag
 		public void AddLife()
 		{
 			Lifes++;
+			_prefsStorage.WriteLifes(Lifes);
 			LifesChanged?.Invoke(Lifes);
 		}
 
 		public void UseLife()
 		{
 			Lifes--;
+			_prefsStorage.WriteLifes(Lifes);
 			LifesChanged?.Invoke(Lifes);
 		}
 	}

@@ -14,6 +14,15 @@ namespace ZigZag
 		[SerializeField]
 		private Button _continueGameButton;
 
+		[SerializeField]
+		private Image _heartIcon;
+
+		[SerializeField]
+		private Color _emptyColor;
+
+		[SerializeField]
+		private Color _activelColor;
+
 		private GameStateService _stateService;
 
 		private GamePlayService _gamePlayService;
@@ -61,7 +70,10 @@ namespace ZigZag
 
 		private void Show()
 		{
-			_continueGameButton.interactable = _gamePlayService.Lifes > 0;
+			bool hasLife = _gamePlayService.Lifes > 0;
+			_continueGameButton.interactable = hasLife;
+
+			_heartIcon.color = hasLife ? _activelColor : _emptyColor;
 
 			gameObject.SetActive(true);
 		}

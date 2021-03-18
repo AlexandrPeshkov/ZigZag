@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &222069078 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 250170710, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+  m_PrefabInstance: {fileID: 1972676781}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &417689380 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5341729250443419643, guid: a3cc9d5bea363be4b875d6f176221f7a, type: 3}
@@ -619,7 +630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers:
-  - {fileID: 11400000, guid: 8942053ae06e2ba48b2fc50b82011732, type: 2}
+  - {fileID: 11400000, guid: 272efa312bca14849b9fecc30a9a9bcb, type: 2}
   _monoInstallers:
   - {fileID: 2015855805}
   _installerPrefabs: []
@@ -776,6 +787,42 @@ PrefabInstance:
     - target: {fileID: 554123280188777796, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _heartIcon
+      value: 
+      objectReference: {fileID: 222069078}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _emptyColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _emptyColor.b
+      value: 0.6313726
+      objectReference: {fileID: 0}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _emptyColor.g
+      value: 0.6313726
+      objectReference: {fileID: 0}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _emptyColor.r
+      value: 0.65882355
+      objectReference: {fileID: 0}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _activelColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _activelColor.b
+      value: 0.22352941
+      objectReference: {fileID: 0}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _activelColor.g
+      value: 0.22352941
+      objectReference: {fileID: 0}
+    - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
+      propertyPath: _activelColor.r
+      value: 0.8980392
       objectReference: {fileID: 0}
     - target: {fileID: 554123280188777797, guid: 244aec8ef37c3784b848bbe9ddd3f803, type: 3}
       propertyPath: _continueGameButton

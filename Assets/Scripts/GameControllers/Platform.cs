@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Zenject;
+using ZigZag.Services;
 
 namespace ZigZag
 {
@@ -20,6 +21,8 @@ namespace ZigZag
 
 		private ScoreService _scoreService;
 
+		private GameStateService _gameState;
+
 		private IMemoryPool _memoryPool;
 
 		public Transform _transform;
@@ -36,9 +39,10 @@ namespace ZigZag
 		public int Points { get; private set; }
 
 		[Inject]
-		private void Construct(ScoreService scoreService)
+		private void Construct(ScoreService scoreService, GameStateService gameStateService)
 		{
 			_scoreService = scoreService;
+			_gameState = gameStateService;
 		}
 
 		private void OnTriggerEnter(Collider other)
@@ -49,6 +53,10 @@ namespace ZigZag
 				HighLight();
 				_scoreService.AddPoints(Points);
 				SphereIn?.Invoke(this);
+			}
+
+			if (_gameState.State == Abstracts.GameState.Failing)
+			{
 			}
 		}
 

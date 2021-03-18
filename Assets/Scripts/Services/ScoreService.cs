@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using ZigZag.Abstracts;
 using ZigZag.Services;
 
@@ -9,13 +7,11 @@ namespace ZigZag
 {
 	public class ScoreService
 	{
-		private const int _highScoreSize = 3;
-
-		private const string _highScoreKey = "HighScore_";
-
 		private bool _isNewRecordSession = false;
 
 		private int _currentScore;
+
+		private readonly PlayerPrefsStorage _prefsStorage;
 
 		public List<int> ScoreTable { get; private set; }
 
@@ -34,16 +30,13 @@ namespace ZigZag
 
 		public event Action<int> ScoreChanged;
 
-		public ScoreService(GameStateService gameStateService)
+		public ScoreService(GameStateService gameStateService, PlayerPrefsStorage playerPrefsStorage)
 		{
-			ScoreTable = new List<int>(Enumerable.Repeat(0, _highScoreSize));
+			_prefsStorage = playerPrefsStorage;
+			ScoreTable = _prefsStorage.ReadScoreTable();
 
-#if UNITY_EDITOR
-			//ClearRecordTable();
-#endif
+			//_prefsStorage.ClearRecordTable();
 			gameStateService.GameStateChanged += OnGameStateChanged;
-
-			ReadScoreTable();
 		}
 
 		private void OnGameStateChanged(GameState state)
@@ -67,7 +60,7 @@ namespace ZigZag
 		private void OnGameFailed()
 		{
 			ScoreTable.Add(CurrentScore);
-			WriteScoreTable();
+			_prefsStorage.WriteScoreTable(ScoreTable);
 		}
 
 		private void ResetScore()
@@ -92,43 +85,5 @@ namespace ZigZag
 				}
 			}
 		}
-
-		private void ReadScoreTable()
-		{
-			for (var i = 0; i < _highScoreSize; i++)
-			{
-				var scoreValue = PlayerPrefs.GetInt($"{_highScoreKey}{i}", -1);
-				if (scoreValue > 0)
-				{
-					ScoreTable[i] = scoreValue;
-				}
-			}
-
-			ScoreTable = ScoreTable.OrderByDescending(x => x).ToList();
-		}
-
-		private void WriteScoreTable()
-		{
-			ScoreTable = ScoreTable.OrderByDescending(x => x).Take(_highScoreSize).ToList();
-
-			for (var i = 0; i < ScoreTable.Count; i++)
-			{
-				PlayerPrefs.SetInt($"{_highScoreKey}{i}", ScoreTable[i]);
-				PlayerPrefs.Save();
-			}
-		}
-
-#if UNITY_EDITOR
-
-		private void ClearRecordTable()
-		{
-			for (var i = 0; i < ScoreTable.Count; i++)
-			{
-				PlayerPrefs.SetInt($"{_highScoreKey}{i}", 0);
-				PlayerPrefs.Save();
-			}
-		}
-
-#endif
 	}
 }
