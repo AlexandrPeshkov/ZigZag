@@ -6,6 +6,9 @@ using ZigZag.Services;
 
 namespace ZigZag
 {
+	/// <summary>
+	/// Диалог завершения игры
+	/// </summary>
 	public class FinishGameDialog : MonoBehaviour
 	{
 		[SerializeField]

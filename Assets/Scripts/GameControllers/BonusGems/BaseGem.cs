@@ -11,6 +11,9 @@ namespace ZigZag
 	/// </summary>
 	public abstract class BaseGem<TEffect> : MonoBehaviour, IGem where TEffect : class, IEffect
 	{
+		/// <summary>
+		/// Звук активации гема
+		/// </summary>
 		[SerializeField]
 		private AudioClip _sound;
 

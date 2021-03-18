@@ -9,6 +9,9 @@ namespace ZigZag.Services
 	/// </summary>
 	public class GameStateService : IInitializable
 	{
+		/// <summary>
+		/// Текущее игровое состояние
+		/// </summary>
 		public GameState State { get; private set; }
 
 		/// <summary>

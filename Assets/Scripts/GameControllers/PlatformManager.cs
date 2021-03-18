@@ -24,17 +24,17 @@ namespace ZigZag
 
 		private List<Platform> _platforms;
 
-		public Platform CurrentPlatform { get; set; }
-
-		private Platform _prevPlatform;
-
-		private Platform _nextPlatform;
-
 		private GameStateService _gameStateService;
 
 		private GameConfig _gameConfig;
 
 		private Platform.Factory _platformFactory;
+
+		private Platform _prevPlatform;
+
+		private Platform _nextPlatform;
+
+		public Platform CurrentPlatform { get; set; }
 
 		public event Action<Platform> PlatformCreated;
 
@@ -121,7 +121,7 @@ namespace ZigZag
 			int index = _platforms.IndexOf(outedPlatform);
 			int fadeablePlatormIndex = index - tailStep;
 
-			//Скрыть платформу и вернуть в пул если на {tailStep} позади от текущекй
+			//Скрыть платформу и вернуть в пул если на {tailStep} позади от текущей
 
 			if (index > 0 && fadeablePlatormIndex > 0)
 			{
