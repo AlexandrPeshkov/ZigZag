@@ -40,6 +40,11 @@ namespace ZigZag.UI
 			gameObject.SetActive(true);
 		}
 
+		private void Hide()
+		{
+			gameObject.SetActive(false);
+		}
+
 		private void OnGameStateChanged(GameState state)
 		{
 			switch (state)
@@ -51,7 +56,7 @@ namespace ZigZag.UI
 					}
 				default:
 					{
-						gameObject.SetActive(false);
+						Hide();
 						break;
 					}
 			}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ZigZag.Abstracts;
 using ZigZag.Services;
 
@@ -34,7 +35,9 @@ namespace ZigZag
 		{
 			_prefsStorage = playerPrefsStorage;
 
-			//_prefsStorage.ClearRecordTable();
+#if DEBUG
+			_prefsStorage.ClearRecordTable();
+#endif
 			ScoreTable = _prefsStorage.ReadScoreTable();
 
 			gameStateService.GameStateChanged += OnGameStateChanged;
@@ -61,6 +64,8 @@ namespace ZigZag
 		private void OnGameFailed()
 		{
 			ScoreTable.Add(CurrentScore);
+			ScoreTable = ScoreTable.OrderByDescending(x => x).ToList();
+
 			_prefsStorage.WriteScoreTable(ScoreTable);
 		}
 

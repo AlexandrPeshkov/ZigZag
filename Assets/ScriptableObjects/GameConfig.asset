@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   _appConfig:
-    PointsGemChance: 0.05
-    SpeedGemChance: 0.05
-    LifeGemChance: 0.01
+    PointsGemChance: 0.237
+    SpeedGemChance: 0.179
+    LifeGemChance: 0.097
     PlatformPoolSize: 30
     firstLineLength: 4

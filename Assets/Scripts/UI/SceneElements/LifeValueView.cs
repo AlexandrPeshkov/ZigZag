@@ -45,7 +45,7 @@ namespace ZigZag.UI
 
 		private void ShowLifes(int lifes)
 		{
-			_lifeValue.text = lifes.ToString();
+			_lifeValue.text = $"+{lifes}";
 			_heartIcon.color = lifes > 0 ? _activelColor : _emptyColor;
 		}
 	}

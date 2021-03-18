@@ -24,7 +24,7 @@ namespace ZigZag
 
 			var platformHeight = platform.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * platform.GetComponent<Transform>().localScale.y * 0.5f;
 
-			var gemHeight = _gemPrefab.GetComponent<MeshRenderer>().bounds.size.y * _gemPrefab.GetComponent<Transform>().localScale.y * 0.5f;
+			var gemHeight = _gemPrefab.GetComponent<MeshRenderer>().bounds.size.y * _gemPrefab.GetComponent<Transform>().localScale.y;
 
 			var gemOffset = new Vector3(0, gemHeight + platformHeight, 0);
 
