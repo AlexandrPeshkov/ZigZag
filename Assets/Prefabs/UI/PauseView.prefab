@@ -57,7 +57,6 @@ MonoBehaviour:
   - {fileID: 5341729251358318897}
   - {fileID: 5341729251305121616}
   _tapText: {fileID: 5341729251366154051}
-  _inputHandler: {fileID: 0}
 --- !u!1 &5341729250473412165
 GameObject:
   m_ObjectHideFlags: 0

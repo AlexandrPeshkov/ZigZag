@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 250170710}
   - component: {fileID: 250170709}
   m_Layer: 5
-  m_Name: RefreshLogo
+  m_Name: HeartIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8584906, g: 0.3037113, b: 0.46701887, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -123,12 +123,12 @@ RectTransform:
   m_Children:
   - {fileID: 250170708}
   - {fileID: 1443600794}
-  m_Father: {fileID: 554123280188777796}
+  m_Father: {fileID: 6506788579277709088}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 177.61, y: 0.0000038146973}
+  m_AnchoredPosition: {x: 177.61, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1061186333
@@ -194,7 +194,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.252759, g: 0.6966072, b: 0.754717, a: 1}
     m_PressedColor: {r: 0.25490198, g: 0.69803923, b: 0.75686276, a: 1}
     m_SelectedColor: {r: 0.25490198, g: 0.69803923, b: 0.75686276, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.24705882, g: 0.24705882, b: 0.24705882, a: 0.57254905}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -418,12 +418,12 @@ RectTransform:
   m_Children:
   - {fileID: 8275134515273928271}
   - {fileID: 554123278695147085}
-  m_Father: {fileID: 554123280188777796}
+  m_Father: {fileID: 6506788579277709088}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -177.61, y: 0.0000038146973}
+  m_AnchoredPosition: {x: -177.61002, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &554123280156250627
@@ -551,8 +551,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 554123280156250624}
-  - {fileID: 1061186329}
+  - {fileID: 6506788579277709088}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -573,7 +572,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c3943c39e7ec094c996ab85417d6722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _content: {fileID: 4196537016830926362}
   _newGameButton: {fileID: 554123280156250625}
+  _continueGameButton: {fileID: 1061186331}
+  _heartIcon: {fileID: 250170710}
+  _activeColor: {r: 0.59607846, g: 0.59607846, b: 0.59607846, a: 1}
+  _disabledColor: {r: 0.85882354, g: 0.3019608, b: 0.46666667, a: 1}
 --- !u!114 &6189997001340139728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -678,3 +682,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 2
   m_AspectRatio: 1
+--- !u!1 &4196537016830926362
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6506788579277709088}
+  m_Layer: 5
+  m_Name: Content
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6506788579277709088
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196537016830926362}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 554123280156250624}
+  - {fileID: 1061186329}
+  m_Father: {fileID: 554123280188777796}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}

@@ -6,8 +6,14 @@ using ZigZag.Services;
 
 namespace ZigZag
 {
+	/// <summary>
+	/// Диалог завершения игры
+	/// </summary>
 	public class FinishGameDialog : MonoBehaviour
 	{
+		[SerializeField]
+		private GameObject _content;
+
 		[SerializeField]
 		private Button _newGameButton;
 
@@ -18,10 +24,10 @@ namespace ZigZag
 		private Image _heartIcon;
 
 		[SerializeField]
-		private Color _emptyColor;
+		private Color _activeColor;
 
 		[SerializeField]
-		private Color _activelColor;
+		private Color _disabledColor;
 
 		private GameStateService _stateService;
 
@@ -75,14 +81,14 @@ namespace ZigZag
 
 			_heartIcon.color = hasLife ? _activelColor : _emptyColor;
 
-			gameObject.SetActive(true);
+			_content.SetActive(true);
 		}
 
 		private void Hide()
 		{
-			if (gameObject.activeSelf == true)
+			if (_content.activeSelf == true)
 			{
-				gameObject.SetActive(false);
+				_content.SetActive(false);
 			}
 		}
 	}
