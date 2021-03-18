@@ -9,10 +9,22 @@ namespace ZigZag
 	public class FinishGameDialog : MonoBehaviour
 	{
 		[SerializeField]
+		private GameObject _content;
+
+		[SerializeField]
 		private Button _newGameButton;
 
 		[SerializeField]
 		private Button _continueGameButton;
+
+		[SerializeField]
+		private Image _heartIcon;
+
+		[SerializeField]
+		private Color _activeColor;
+
+		[SerializeField]
+		private Color _disabledColor;
 
 		private GameStateService _stateService;
 
@@ -61,16 +73,18 @@ namespace ZigZag
 
 		private void Show()
 		{
-			_continueGameButton.interactable = _gamePlayService.Lifes > 0;
+			bool isActive = _gamePlayService.Lifes > 0;
+			_continueGameButton.interactable = isActive;
+			_heartIcon.color = isActive ? _activeColor : _disabledColor;
 
-			gameObject.SetActive(true);
+			_content.SetActive(true);
 		}
 
 		private void Hide()
 		{
-			if (gameObject.activeSelf == true)
+			if (_content.activeSelf == true)
 			{
-				gameObject.SetActive(false);
+				_content.SetActive(false);
 			}
 		}
 	}

@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8962264, g: 0.2240566, b: 0.2240566, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -137,6 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6604624760918545485}
   - component: {fileID: 5379491484471645327}
+  - component: {fileID: 847946352}
   m_Layer: 5
   m_Name: Lifes
   m_TagString: Untagged
@@ -179,6 +180,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1.2794373
+--- !u!114 &847946352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604624760918545484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 680b862f2257b1f4d967b445bfa8cc71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lifeValue: {fileID: 6604624761081817591}
+  _heartIcon: {fileID: 6604624760174726046}
+  _emptyColor: {r: 0.65882355, g: 0.6313726, b: 0.6313726, a: 1}
+  _activelColor: {r: 0.8980392, g: 0.22352941, b: 0.22352941, a: 1}
 --- !u!1 &6604624761081817585
 GameObject:
   m_ObjectHideFlags: 0

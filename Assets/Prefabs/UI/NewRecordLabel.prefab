@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7295111660848366747}
-  - component: {fileID: 7295111660848366748}
+  - component: {fileID: 1357962151}
   m_Layer: 5
   m_Name: NewRecordLabel
   m_TagString: Untagged
@@ -37,7 +37,7 @@ RectTransform:
   m_AnchoredPosition: {x: 18.47168, y: -110.400024}
   m_SizeDelta: {x: -720.5551, y: 83.9726}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7295111660848366748
+--- !u!114 &1357962151
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7295111660848366746}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 949b55d6274e265429ec626146cd9f7c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d47177ae2ccc8b488e9fc42711fe132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _content: {fileID: 7295111661716019007}

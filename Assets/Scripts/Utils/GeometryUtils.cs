@@ -9,7 +9,7 @@ namespace ZigZag.Utils
 		/// Получение точки на параболе
 		/// </summary>
 		/// <param name="start">Стартовая точка</param>
-		/// <param name="end">Конечная точка</param>
+		/// <param name="end">Конечная точка</par
 		/// <param name="height">Высота параболы</param>
 		/// <param name="t">Коэф. интерполяции</param>
 		/// <returns></returns>
