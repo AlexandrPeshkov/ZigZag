@@ -33,9 +33,10 @@ namespace ZigZag
 		public ScoreService(GameStateService gameStateService, PlayerPrefsStorage playerPrefsStorage)
 		{
 			_prefsStorage = playerPrefsStorage;
-			ScoreTable = _prefsStorage.ReadScoreTable();
 
 			//_prefsStorage.ClearRecordTable();
+			ScoreTable = _prefsStorage.ReadScoreTable();
+
 			gameStateService.GameStateChanged += OnGameStateChanged;
 		}
 

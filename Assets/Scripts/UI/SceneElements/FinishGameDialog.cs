@@ -79,7 +79,7 @@ namespace ZigZag
 			bool hasLife = _gamePlayService.Lifes > 0;
 			_continueGameButton.interactable = hasLife;
 
-			_heartIcon.color = hasLife ? _activelColor : _emptyColor;
+			_heartIcon.color = hasLife ? _activeColor : _disabledColor;
 
 			_content.SetActive(true);
 		}

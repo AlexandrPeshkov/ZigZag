@@ -61,5 +61,11 @@ namespace ZigZag
 			PlayerPrefs.SetInt(_lifesKey, lifes);
 			PlayerPrefs.Save();
 		}
+
+		public void CleatLifes()
+		{
+			PlayerPrefs.SetInt(_lifesKey, 0);
+			PlayerPrefs.Save();
+		}
 	}
 }

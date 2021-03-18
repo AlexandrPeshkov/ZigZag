@@ -38,6 +38,7 @@ namespace ZigZag
 			_prefsStorage = prefsStorage;
 			DifficultyLevel = 1;
 
+			//_prefsStorage.CleatLifes();
 			Lifes = _prefsStorage.ReadLifes();
 		}
 
