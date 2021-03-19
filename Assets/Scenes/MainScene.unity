@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: ae15ef7ca26fa8940827f0f03d798a4c, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 5b40d5252583b384f8abc27ed2769284, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.77488863, g: 0.3521501, b: 0.43990815, a: 1}
+  m_IndirectSpecularColor: {r: 0.9525439, g: 0.5073409, b: 0.52480304, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -763,6 +763,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7264165699251878860, guid: e9769f7b381757a449210943c46e6852, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9769f7b381757a449210943c46e6852, type: 3}
 --- !u!1001 &5341729250025877727
@@ -1076,7 +1080,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524655032049793858, guid: 9f76fc5d3d267c24896812f8564aa0f7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 171.8421
       objectReference: {fileID: 0}
     - target: {fileID: 8524655032049793858, guid: 9f76fc5d3d267c24896812f8564aa0f7, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1240,7 +1244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524655033724954819, guid: 9f76fc5d3d267c24896812f8564aa0f7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 171.8421
       objectReference: {fileID: 0}
     - target: {fileID: 8524655033724954819, guid: 9f76fc5d3d267c24896812f8564aa0f7, type: 3}
       propertyPath: m_AnchoredPosition.x

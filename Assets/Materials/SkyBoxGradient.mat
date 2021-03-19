@@ -59,6 +59,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -94,9 +95,9 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color1: {r: 0.13256079, g: 0.5754717, b: 0.04071733, a: 0}
-    - _Color2: {r: 0.8679245, g: 0.13510147, b: 0.65092605, a: 0}
-    - _Color3: {r: 1, g: 0.46910286, b: 0.2783019, a: 1}
+    - _Color1: {r: 1, g: 1, b: 1, a: 0}
+    - _Color2: {r: 0.93333334, g: 0.109803915, b: 0.262802, a: 0}
+    - _Color3: {r: 0.9433962, g: 0.51840323, b: 0.28924885, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SkyColor1: {r: 0.058339275, g: 0.2615617, b: 0.5377358, a: 1}
     - _SkyColor2: {r: 0.764151, g: 0.5387403, b: 0.111739054, a: 1}
