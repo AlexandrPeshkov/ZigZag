@@ -1,12 +1,12 @@
 ﻿using System;
+using Zenject;
 
 namespace ZigZag
 {
 	/// <summary>
 	/// Бонусный объект
 	/// </summary>
-	public interface IGem : IDisposable
-
+	public interface IGem : IPoolable<IMemoryPool, Platform>, IDisposable
 	{
 		/// <summary>
 		/// Гем активирован

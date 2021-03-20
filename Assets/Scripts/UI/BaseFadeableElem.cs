@@ -42,8 +42,6 @@ namespace ZigZag.UI
 		{
 			_rectTranform.SetParent(_mainCanvasRect);
 
-			//_offset = _rectTranform.sizeDelta / -2f;
-
 			Vector2 screenPos = _mainCamera.WorldToScreenPointProjected(gemWorldPos);
 			screenPos += _offset;
 

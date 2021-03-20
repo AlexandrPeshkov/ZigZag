@@ -1,26 +1,26 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
+using ZigZag.Infrastructure;
 
 namespace ZigZag
 {
 	public class GemFactory<TGem> : PlaceholderFactory<Platform, TGem>
 		where TGem : Component, IGem
 	{
-		private DiContainer _container;
+		private GemMemoryPool<TGem> _gemPool;
 
 		private TGem _gemPrefab;
 
 		[Inject]
-		private void Construct(DiContainer container, TGem gemPrefab)
+		private void Construct(TGem gemPrefab, GemMemoryPool<TGem> gemPool)
 		{
-			_container = container;
 			_gemPrefab = gemPrefab;
+			_gemPool = gemPool;
 		}
 
 		public override TGem Create(Platform platform)
 		{
-			TGem gem = _container.InstantiatePrefabForComponent<TGem>(_gemPrefab);
+			TGem gem = _gemPool.Spawn(_gemPool, platform);
 
 			var platformHeight = platform.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * platform.GetComponent<Transform>().localScale.y * 0.5f;
 

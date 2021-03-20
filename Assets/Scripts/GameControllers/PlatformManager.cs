@@ -51,8 +51,38 @@ namespace ZigZag
 
 			_top = Vector3.forward * _platformWidth;
 			_left = Vector3.left * _platformWidth;
+		}
 
+		private void Start()
+		{
 			Init();
+		}
+
+		/// <summary>
+		/// Проверка положения сферы по границам платформ
+		/// </summary>
+		/// <param name="spherePos">Позиция в плоскости x-z</param>
+		/// <returns></returns>
+		public bool IsInPlatforms(Vector2 spherePos)
+		{
+			return (_prevPlatform?.TopRect.Contains(spherePos) == true)
+			|| (CurrentPlatform?.TopRect.Contains(spherePos) == true)
+			 || (_nextPlatform?.TopRect.Contains(spherePos) == true);
+		}
+
+		/// <summary>
+		/// Расчет безопасного направления после восстановления
+		/// </summary>
+		public Vector3 GetSafetyDirection()
+		{
+			if (_nextPlatform != null && CurrentPlatform != null)
+			{
+				return (_nextPlatform.transform.position - CurrentPlatform.transform.position).normalized;
+			}
+			else
+			{
+				return Vector3.forward;
+			}
 		}
 
 		private void OnGameStateChanged(GameState state)
@@ -75,9 +105,9 @@ namespace ZigZag
 			_prevPlatform = null;
 			_nextPlatform = null;
 
-			for (var i = 0; i < _gameConfig.PlatformPoolSize; i++)
+			for (var i = 0; i < Math.Max(_gameConfig.PlatformPoolSize, _gameConfig.FirstLineLength); i++)
 			{
-				bool isFirstLine = i < _gameConfig.firstLineLength;
+				bool isFirstLine = i < _gameConfig.FirstLineLength;
 				GeneratePlatform(_platforms.LastOrDefault(), isFirstLine);
 			}
 		}
@@ -106,8 +136,10 @@ namespace ZigZag
 			platform.SphereIn += OnSphereIn;
 
 			_platforms.Add(platform);
-			platform.name = $"Platform {_platforms.Count}";
-			PlatformCreated?.Invoke(platform);
+			if (isFirstLine == false)
+			{
+				PlatformCreated?.Invoke(platform);
+			}
 		}
 
 		/// <summary>
@@ -116,10 +148,8 @@ namespace ZigZag
 		/// <param name="outedPlatform">Платформа, которую прошла сфера</param>
 		private void OnSphereOut(Platform outedPlatform)
 		{
-			int tailStep = 15;
-
 			int index = _platforms.IndexOf(outedPlatform);
-			int fadeablePlatormIndex = index - tailStep;
+			int fadeablePlatormIndex = index - _gameConfig.TailLengthForHide;
 
 			//Скрыть платформу и вернуть в пул если на {tailStep} позади от текущей
 
@@ -169,18 +199,6 @@ namespace ZigZag
 				platform.Dispose();
 			}
 			Init();
-		}
-
-		/// <summary>
-		/// Проверка положения сферы по границам платформ
-		/// </summary>
-		/// <param name="spherePos">Позиция в плоскости x-z</param>
-		/// <returns></returns>
-		public bool IsInPlatforms(Vector2 spherePos)
-		{
-			return (_prevPlatform?.TopRect.Contains(spherePos) == true)
-			|| (CurrentPlatform?.TopRect.Contains(spherePos) == true)
-			 || (_nextPlatform?.TopRect.Contains(spherePos) == true);
 		}
 	}
 }

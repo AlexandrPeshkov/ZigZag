@@ -26,7 +26,7 @@ namespace ZigZag.Infrastructure
 		{
 			switch (state)
 			{
-				case GameState.Run:
+				case GameState.Runing:
 					{
 						PlayBackground();
 						break;

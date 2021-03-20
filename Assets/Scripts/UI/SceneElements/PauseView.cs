@@ -20,8 +20,6 @@ namespace ZigZag.UI
 			1f;
 #endif
 
-		private GameStateService _stateService;
-
 		[SerializeField]
 		private GameObject _content;
 
@@ -32,6 +30,8 @@ namespace ZigZag.UI
 		private Text _tapText;
 
 		private InputHandler _inputHandler;
+
+		private GameStateService _stateService;
 
 		/// <summary>
 		/// Показ отсчета запущен
@@ -72,12 +72,22 @@ namespace ZigZag.UI
 						OnGamePause();
 						break;
 					}
+				case GameState.Restore:
+					{
+						OnRestoreGame();
+						break;
+					}
 			}
 		}
 
 		private void OnGamePause()
 		{
 			_content.SetActive(true);
+		}
+
+		private void OnRestoreGame()
+		{
+			StartCoroutine(ShowCountdown());
 		}
 
 		private IEnumerator ShowCountdown()
@@ -91,7 +101,7 @@ namespace ZigZag.UI
 				_countdownElems[i]?.SetActive(false);
 			}
 
-			_stateService.ChangeState(GameState.Run);
+			_stateService.ChangeState(GameState.Runing);
 			_countDownStarted = false;
 		}
 	}

@@ -16,5 +16,7 @@ MonoBehaviour:
     PointsGemChance: 0.125
     SpeedGemChance: 0.116
     LifeGemChance: 0.032
-    PlatformPoolSize: 30
-    firstLineLength: 4
+    GemPoolSize: 7
+    FirstLineLength: 5
+    TailLengthForHide: 10
+    PlatformPoolSize: 25

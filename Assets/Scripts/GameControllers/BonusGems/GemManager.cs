@@ -56,7 +56,7 @@ namespace ZigZag
 			{
 				case GameState.StartNewGame:
 					{
-						ClearBonuses();
+						ClearGems();
 						break;
 					}
 			}
@@ -125,11 +125,11 @@ namespace ZigZag
 			gem.Dispose();
 		}
 
-		private void ClearBonuses()
+		private void ClearGems()
 		{
-			foreach (var bonus in _spawnedGems)
+			foreach (var gem in _spawnedGems)
 			{
-				bonus.Dispose();
+				gem.Dispose();
 			}
 		}
 	}

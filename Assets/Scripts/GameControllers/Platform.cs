@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Zenject;
+using ZigZag.Infrastructure;
 using ZigZag.Services;
 
 namespace ZigZag
@@ -30,6 +31,8 @@ namespace ZigZag
 		public event Action<Platform> SphereOut;
 
 		public event Action<Platform> SphereIn;
+
+		public event Action<Platform> Disposed;
 
 		public Rect TopRect { get; private set; }
 
@@ -112,10 +115,13 @@ namespace ZigZag
 		public void Dispose()
 		{
 			_memoryPool.Despawn(this);
+			Disposed?.Invoke(this);
 		}
 
 		#endregion IPoolable
 
-		public class Factory : PlaceholderFactory<int, Vector3, Platform> { }
+		public class Factory : PlaceholderFactory<int, Vector3, Platform>
+		{
+		}
 	}
 }

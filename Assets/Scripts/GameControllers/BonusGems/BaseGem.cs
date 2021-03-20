@@ -29,6 +29,10 @@ namespace ZigZag
 
 		protected DiContainer _container;
 
+		protected IMemoryPool _memoryPool;
+
+		private Platform _bindedPlatform;
+
 		public event Action<IGem> Collected;
 
 		[Inject]
@@ -64,12 +68,33 @@ namespace ZigZag
 
 		protected abstract void ApplyEffect();
 
+		public void OnSpawned(IMemoryPool pool, Platform platform)
+		{
+			if (_bindedPlatform != null)
+			{
+				_bindedPlatform.Disposed -= OnPlatformDisposed;
+			}
+			_bindedPlatform = platform;
+
+			_bindedPlatform.Disposed += OnPlatformDisposed;
+			_memoryPool = pool;
+		}
+
+		private void OnPlatformDisposed(Platform platform)
+		{
+			_bindedPlatform.Disposed -= OnPlatformDisposed;
+			_bindedPlatform = null;
+			Dispose();
+		}
+
+		public void OnDespawned()
+		{
+			_memoryPool = null;
+		}
+
 		public void Dispose()
 		{
-			if (this != null && gameObject != null)
-			{
-				Destroy(this.gameObject);
-			}
+			_memoryPool?.Despawn(this);
 		}
 	}
 }

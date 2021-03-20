@@ -22,13 +22,21 @@ namespace ZigZag.Infrastructure
 		[Range(0, 1)]
 		public float LifeGemChance;
 
+		[Tooltip("Размер пула гемов")]
+		public int GemPoolSize;
+
 		[Space]
-		[Header("Настройки производительности")]
-		[Tooltip("Вероятность бонуса очков")]
-		public int PlatformPoolSize;
+		[Header("Настройки платформ")]
+		//public int PlatformPoolSize;
 
 		[Tooltip("Длина стартовой прямой линии")]
 		[Min(4)]
-		public int firstLineLength;
+		public int FirstLineLength;
+
+		[Tooltip("Расстояние от текущей платформы для скрытия")]
+		public int TailLengthForHide;
+
+		[Tooltip("Размер пула платформ")]
+		public int PlatformPoolSize;
 	}
 }

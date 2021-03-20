@@ -56,9 +56,6 @@ namespace ZigZag.Infrastructure
 		private RecordTable _recordTable;
 
 		[SerializeField]
-		private Camera _mainCamera;
-
-		[SerializeField]
 		private Canvas _mainCanvas;
 
 		[Inject]
@@ -68,6 +65,7 @@ namespace ZigZag.Infrastructure
 		{
 			InstallSceneDependencies();
 			BindServices();
+			InstallMemoryPools();
 		}
 
 		/// <summary>
@@ -106,32 +104,24 @@ namespace ZigZag.Infrastructure
 
 			Container.Bind<GemManager>().FromComponentInNewPrefab(_bonusManagerPrefab).AsSingle().NonLazy();
 
-			//Memory pool
-
-			Container.BindFactory<int, Vector3, Platform, Platform.Factory>()
-				.FromMonoPoolableMemoryPool<int, Vector3, Platform>(binder => binder
-					.WithInitialSize(_gameConfig.PlatformPoolSize)
-					.FromComponentInNewPrefab(_platform)
-					.UnderTransform(cntx => cntx.Container.Resolve<PlatformManager>().transform));
-
 			//Gems and effects
 			Container.Bind<EffectManager>().AsSingle();
 
-			Container.BindFactory<Platform, SpeedGem, GemFactory<SpeedGem>>()
-				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(SpeedGem), Value = _speedGemPrefab } })
-				.FromComponentInNewPrefab(_speedGemPrefab);
+			Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
+			Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();
+			Container.Bind<IEffectFactory<LifeEffect>>().To<LifeEffectFactory>().AsSingle();
 
 			Container.BindFactory<Platform, PointsGem, GemFactory<PointsGem>>()
 				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(PointsGem), Value = _pointsGemPrefab } })
 				.FromComponentInNewPrefab(_pointsGemPrefab);
 
+			Container.BindFactory<Platform, SpeedGem, GemFactory<SpeedGem>>()
+				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(SpeedGem), Value = _speedGemPrefab } })
+				.FromComponentInNewPrefab(_speedGemPrefab);
+
 			Container.BindFactory<Platform, LifeGem, GemFactory<LifeGem>>()
 				.WithFactoryArgumentsExplicit(new TypeValuePair[] { new TypeValuePair { Type = typeof(LifeGem), Value = _lifeGemPrefab } })
 				.FromComponentInNewPrefab(_lifeGemPrefab);
-
-			Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
-			Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();
-			Container.Bind<IEffectFactory<LifeEffect>>().To<LifeEffectFactory>().AsSingle();
 		}
 
 		/// <summary>
@@ -152,6 +142,33 @@ namespace ZigZag.Infrastructure
 			Container.BindInstance(_recordTable).AsSingle();
 
 			Container.BindInstance(_mainCanvas).WithId(DiConstants._mainCanvas).AsSingle();
+		}
+
+		/// <summary>
+		/// Бинд пулов
+		/// </summary>
+		private void InstallMemoryPools()
+		{
+			Container.BindFactory<int, Vector3, Platform, Platform.Factory>()
+				.FromMonoPoolableMemoryPool<int, Vector3, Platform>(binder => binder
+					.WithInitialSize(_gameConfig.FirstLineLength + _gameConfig.TailLengthForHide)
+					.FromComponentInNewPrefab(_platform)
+					.UnderTransform(cntx => cntx.Container.Resolve<PlatformManager>().transform));
+
+			Container.BindMemoryPool<PointsGem, GemMemoryPool<PointsGem>>()
+				.WithInitialSize(_gameConfig.GemPoolSize)
+				.FromComponentInNewPrefab(_pointsGemPrefab)
+				.UnderTransform(cntx => cntx.Container.Resolve<GemManager>().transform);
+
+			Container.BindMemoryPool<SpeedGem, GemMemoryPool<SpeedGem>>()
+				.WithInitialSize(_gameConfig.GemPoolSize)
+				.FromComponentInNewPrefab(_speedGemPrefab)
+				.UnderTransform(cntx => cntx.Container.Resolve<GemManager>().transform);
+
+			Container.BindMemoryPool<LifeGem, GemMemoryPool<LifeGem>>()
+				.WithInitialSize(_gameConfig.GemPoolSize)
+				.FromComponentInNewPrefab(_lifeGemPrefab)
+				.UnderTransform(cntx => cntx.Container.Resolve<GemManager>().transform);
 		}
 	}
 }

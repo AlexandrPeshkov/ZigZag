@@ -60,7 +60,7 @@ namespace ZigZag
 
 		private void OnLeftMouseButtonUp()
 		{
-			if (_gameStateService.State == GameState.Run)
+			if (_gameStateService.State == GameState.Runing)
 			{
 				_currentDirection = _currentDirection == Vector3.left ? Vector3.forward : Vector3.left;
 			}
@@ -90,7 +90,7 @@ namespace ZigZag
 
 		private void FixedUpdate()
 		{
-			if (_gameStateService.State == GameState.Run)
+			if (_gameStateService.State == GameState.Runing)
 			{
 				if (CheckFail())
 				{
@@ -148,7 +148,7 @@ namespace ZigZag
 		private void OnGameRestore()
 		{
 			_transform.position = _platformManager.CurrentPlatform._transform.position + _startPosition;
-			_gameStateService.ChangeState(GameState.Run);
+			_currentDirection = _platformManager.GetSafetyDirection();
 		}
 	}
 }
