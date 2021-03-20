@@ -14,12 +14,6 @@ namespace ZigZag.UI
 		[SerializeField]
 		private Image _heartIcon;
 
-		[SerializeField]
-		private Color _emptyColor;
-
-		[SerializeField]
-		private Color _activelColor;
-
 		private GamePlayService _gamePlayService;
 
 		[Inject]
@@ -45,8 +39,7 @@ namespace ZigZag.UI
 
 		private void ShowLifes(int lifes)
 		{
-			_lifeValue.text = $"+{lifes}";
-			_heartIcon.color = lifes > 0 ? _activelColor : _emptyColor;
+			_lifeValue.text = lifes.ToString();
 		}
 	}
 }

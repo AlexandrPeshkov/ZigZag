@@ -91,9 +91,18 @@ namespace ZigZag.Infrastructure
 
 			Container.Bind<SoundManager>().FromComponentInNewPrefab(_soundManagerPrefab).AsSingle().NonLazy();
 
-			Container.Bind<GameCameraController>().FromNewComponentOn(Camera.main.gameObject).AsSingle().NonLazy();
+			//Container.Bind<GameCameraController>().FromNewComponentOn(Camera.main.gameObject).AsSingle().NonLazy();
 
-			Container.Bind<SphereController>().FromComponentInNewPrefab(_sphereControllerPrefab).WithGameObjectName(SphereController._objectName).AsSingle();
+			Container.Bind<SphereController>()
+				.FromComponentInNewPrefab(_sphereControllerPrefab)
+				.WithGameObjectName(SphereController._objectName)
+				.AsSingle()
+				.NonLazy();
+
+			Container.Bind<Camera>()
+				.WithId(DiConstants._mainCamera)
+				.FromComponentOn(cntx => cntx.Container.Resolve<SphereController>().gameObject.GetComponentInChildren<Camera>().gameObject)
+				.AsSingle();
 
 			Container.Bind<GemManager>().FromComponentInNewPrefab(_bonusManagerPrefab).AsSingle().NonLazy();
 
@@ -141,8 +150,6 @@ namespace ZigZag.Infrastructure
 			Container.BindInstance(_pauseView).AsSingle();
 
 			Container.BindInstance(_recordTable).AsSingle();
-
-			Container.BindInstance(_mainCamera).WithId(DiConstants._mainCamera).AsSingle();
 
 			Container.BindInstance(_mainCanvas).WithId(DiConstants._mainCanvas).AsSingle();
 		}

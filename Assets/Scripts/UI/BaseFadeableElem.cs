@@ -34,7 +34,7 @@ namespace ZigZag.UI
 			_mainCamera = mainCamera;
 			_mainCanvasRect = mainCanvas.GetComponent<RectTransform>();
 
-			_offset = _rectTranform.sizeDelta / -2f;
+			_offset = _rectTranform.sizeDelta;
 			_step = Vector3.up * _speed;
 		}
 
@@ -42,7 +42,7 @@ namespace ZigZag.UI
 		{
 			_rectTranform.SetParent(_mainCanvasRect);
 
-			_offset = _rectTranform.sizeDelta / -2f;
+			//_offset = _rectTranform.sizeDelta / -2f;
 
 			Vector2 screenPos = _mainCamera.WorldToScreenPointProjected(gemWorldPos);
 			screenPos += _offset;
