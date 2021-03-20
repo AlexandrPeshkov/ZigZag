@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: DebugConfig
   m_EditorClassIdentifier: 
   _appConfig:
-    PointsGemChance: 1
-    SpeedGemChance: 1
-    LifeGemChance: 1
+    PointsGemChance: 0
+    SpeedGemChance: 0
+    LifeGemChance: 0.193
     PlatformPoolSize: 5
     firstLineLength: 4

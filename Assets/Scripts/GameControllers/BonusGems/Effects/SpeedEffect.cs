@@ -26,8 +26,6 @@ namespace ZigZag
 
 		public EffectLifecycle EffectLifecycle => EffectLifecycle.Temporary;
 
-		public string Text => "Speed up!";
-
 		public SpeedEffect(int seconds, float speed, GamePlayService gamePlay)
 		{
 			_gamePlay = gamePlay;

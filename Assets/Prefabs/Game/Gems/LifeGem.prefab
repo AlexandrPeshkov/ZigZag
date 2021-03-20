@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sound: {fileID: 8300000, guid: 3e18274e8d790c5489ddb5b54b16c39a, type: 3}
-  _textPrefab: {fileID: 7404709981157209157, guid: 6f369af95ebc1fa45affc9ab56d8163f, type: 3}
+  _reactionHint: {fileID: 2493325709440415964, guid: 6f369af95ebc1fa45affc9ab56d8163f, type: 3}
 --- !u!1001 &6819737996228900368
 PrefabInstance:
   m_ObjectHideFlags: 0

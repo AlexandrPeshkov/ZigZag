@@ -15,15 +15,15 @@ namespace ZigZag
 		/// Звук активации гема
 		/// </summary>
 		[SerializeField]
-		private AudioClip _sound;
+		protected AudioClip _sound;
 
 		/// <summary>
-		/// Префаб текста эффекта при активации гема
+		/// Префаб хинта эффекта при активации гема
 		/// </summary>
 		[SerializeField]
-		protected FadedText _textPrefab;
+		protected BaseFadeableElem _reactionHint;
 
-		private SoundManager _soundManager;
+		protected SoundManager _soundManager;
 
 		protected EffectManager _effectManager;
 
@@ -50,17 +50,19 @@ namespace ZigZag
 		/// <summary>
 		/// Реакция на подбор бонус-гема
 		/// </summary>
-		public virtual void CollectReaction()
+		public void CollectReaction()
 		{
+			PlaySound();
+			ApplyEffect();
 			Collected?.Invoke(this);
-
-			TEffect effect = _effectManager.ApplyEffect<TEffect>();
-			_soundManager.PlayEffectSound(_sound);
-
-			FadedText text = _container.InstantiatePrefabForComponent<FadedText>(_textPrefab);
-
-			text.Show(this.transform.position, effect.Text);
 		}
+
+		protected virtual void PlaySound()
+		{
+			_soundManager.PlayEffectSound(_sound);
+		}
+
+		protected abstract void ApplyEffect();
 
 		public void Dispose()
 		{

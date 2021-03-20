@@ -264,6 +264,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 680b862f2257b1f4d967b445bfa8cc71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &886502666 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1387988919046858793, guid: e9769f7b381757a449210943c46e6852, type: 3}
+  m_PrefabInstance: {fileID: 3432735811379334244}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c8d68aa2cedd845b2f761d3c21c9ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers:
-  - {fileID: 11400000, guid: 272efa312bca14849b9fecc30a9a9bcb, type: 2}
+  - {fileID: 11400000, guid: 8942053ae06e2ba48b2fc50b82011732, type: 2}
   _monoInstallers:
   - {fileID: 2015855805}
   _installerPrefabs: []
@@ -649,7 +660,7 @@ MonoBehaviour:
   _lifeGemPrefab: {fileID: -2683414780330895310, guid: 72a2136c3de0bd04d8cb5790cae5f91f, type: 3}
   _finishGameDialog: {fileID: 8524655033104468709}
   _newRecordMessage: {fileID: 1357962151}
-  _scoreView: {fileID: 0}
+  _scoreView: {fileID: 886502666}
   _lifesView: {fileID: 847946352}
   _pauseView: {fileID: 417689381}
   _recordTable: {fileID: 96705771}
@@ -1080,7 +1091,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524655032049793858, guid: 9f76fc5d3d267c24896812f8564aa0f7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 171.8421
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8524655032049793858, guid: 9f76fc5d3d267c24896812f8564aa0f7, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1244,7 +1255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524655033724954819, guid: 9f76fc5d3d267c24896812f8564aa0f7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 171.8421
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8524655033724954819, guid: 9f76fc5d3d267c24896812f8564aa0f7, type: 3}
       propertyPath: m_AnchoredPosition.x

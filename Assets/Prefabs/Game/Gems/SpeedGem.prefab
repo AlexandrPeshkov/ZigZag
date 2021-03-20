@@ -39,19 +39,19 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4507569533057323569}
-  serializedVersion: 7
+  serializedVersion: 8
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
+  emitterVelocityMode: 1
   looping: 1
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -601,6 +601,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     maxNumParticles: 1000
+    customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -4750,6 +4751,7 @@ ParticleSystemRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -4817,7 +4819,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sound: {fileID: 8300000, guid: 3e18274e8d790c5489ddb5b54b16c39a, type: 3}
-  _textPrefab: {fileID: 8585257424817845160, guid: 27dfc58e3bfce8e46b9847f803ca95b5, type: 3}
+  _reactionHint: {fileID: 1322942853398466282, guid: 27dfc58e3bfce8e46b9847f803ca95b5, type: 3}
+  _activationText: Speed up!
 --- !u!1001 &6125697631861485163
 PrefabInstance:
   m_ObjectHideFlags: 0

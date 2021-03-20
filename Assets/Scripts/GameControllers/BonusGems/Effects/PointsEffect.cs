@@ -7,21 +7,19 @@
 	{
 		private readonly ScoreService _scoreService;
 
-		private readonly int _points;
+		public int Points { get; private set; }
 
 		public EffectLifecycle EffectLifecycle => EffectLifecycle.Instantaneous;
-
-		public string Text => $"+{_points}";
 
 		public PointsEffect(ScoreService scoreService, int points)
 		{
 			_scoreService = scoreService;
-			_points = points;
+			Points = points;
 		}
 
 		public void Apply()
 		{
-			_scoreService.AddPoints(_points);
+			_scoreService.AddPoints(Points);
 		}
 
 		public void Cancel()

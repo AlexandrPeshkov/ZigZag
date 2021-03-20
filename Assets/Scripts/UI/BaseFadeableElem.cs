@@ -1,27 +1,30 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace ZigZag.UI
 {
-	public class FadedText : MonoBehaviour
+	/// <summary>
+	/// Исчезающий текст
+	/// </summary>
+	public abstract class BaseFadeableElem : MonoBehaviour
 	{
-		[SerializeField]
-		private Text _text;
-
-		private const float _fadeTime = 1.5f;
-
 		[SerializeField]
 		private RectTransform _rectTranform;
 
-		private Camera _mainCamera;
+		[SerializeField]
+		private float _fadeTime = 1.5f;
 
-		private Canvas _mainCanvas;
+		[SerializeField]
+		private float _speed = 1.5f;
 
-		private RectTransform _mainCanvasRect;
+		private Vector3 _step;
 
 		private Vector2 _offset;
+
+		private Camera _mainCamera;
+
+		private RectTransform _mainCanvasRect;
 
 		[Inject]
 		private void Construct(
@@ -29,16 +32,16 @@ namespace ZigZag.UI
 			[Inject(Id = DiConstants._mainCanvas)] Canvas mainCanvas)
 		{
 			_mainCamera = mainCamera;
-			_mainCanvas = mainCanvas;
-			_mainCanvasRect = _mainCanvas.GetComponent<RectTransform>();
+			_mainCanvasRect = mainCanvas.GetComponent<RectTransform>();
 
 			_offset = _rectTranform.sizeDelta / -2f;
+			_step = Vector3.up * _speed;
 		}
 
-		public virtual void Show(Vector3 gemWorldPos, string text)
+		public virtual void Show(Vector3 gemWorldPos)
 		{
 			_rectTranform.SetParent(_mainCanvasRect);
-			_text.text = text;
+
 			_offset = _rectTranform.sizeDelta / -2f;
 
 			Vector2 screenPos = _mainCamera.WorldToScreenPointProjected(gemWorldPos);
@@ -59,13 +62,25 @@ namespace ZigZag.UI
 			float timer = 0f;
 			do
 			{
-				transform.position += Vector3.up;
+				transform.position += _step;
+				float alpha = 1f;
+				float alphaConstTime = _fadeTime * 0.6f;
+				float alphaFadeTime = _fadeTime - alphaConstTime;
+
+				if (timer > alphaConstTime)
+				{
+					alpha = 1f - (timer - alphaConstTime) / (alphaFadeTime);
+				}
+				SetContentAlpha(alpha);
 				timer += Time.deltaTime;
+
 				yield return new WaitForFixedUpdate();
 			}
 			while (timer < _fadeTime);
 
 			Destroy(this.gameObject);
 		}
+
+		protected abstract void SetContentAlpha(float alpha);
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 using ZigZag.Services;
 using ZigZag.UI;
@@ -11,7 +10,7 @@ namespace ZigZag.Infrastructure
 	/// </summary>
 	public class SceneInstaller : MonoInstaller
 	{
-		[Header("Prefabs")]
+		[Header("Domain prefabs")]
 		[SerializeField]
 		private PlatformManager _platformManagerPrefab;
 
@@ -23,6 +22,9 @@ namespace ZigZag.Infrastructure
 
 		[SerializeField]
 		private GemManager _bonusManagerPrefab;
+
+		[SerializeField]
+		private Platform _platform;
 
 		[Header("Gems")]
 		[SerializeField]
@@ -52,9 +54,6 @@ namespace ZigZag.Infrastructure
 
 		[SerializeField]
 		private RecordTable _recordTable;
-
-		[SerializeField]
-		private Platform _platform;
 
 		[SerializeField]
 		private Camera _mainCamera;

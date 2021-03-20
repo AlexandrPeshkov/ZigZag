@@ -9,11 +9,12 @@
 
 		public EffectLifecycle EffectLifecycle => EffectLifecycle.Instantaneous;
 
-		public string Text => "+1";
+		public int LifesCount { get; private set; }
 
-		public LifeEffect(GamePlayService gamePlayService)
+		public LifeEffect(GamePlayService gamePlayService, int lifes)
 		{
 			_gamePlayService = gamePlayService;
+			LifesCount = lifes;
 		}
 
 		public void Apply()
@@ -23,6 +24,7 @@
 
 		public void Cancel()
 		{
+			//nothing
 		}
 	}
 }

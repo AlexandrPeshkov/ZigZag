@@ -11,7 +11,7 @@
 
 		public LifeEffect Create()
 		{
-			return new LifeEffect(_gamePlayService);
+			return new LifeEffect(_gamePlayService, 1);
 		}
 	}
 }

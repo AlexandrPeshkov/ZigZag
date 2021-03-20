@@ -19,10 +19,5 @@
 		/// Тип жизненного цикла
 		/// </summary>
 		EffectLifecycle EffectLifecycle { get; }
-
-		/// <summary>
-		/// Текст активации
-		/// </summary>
-		string Text { get; }
 	}
 }
