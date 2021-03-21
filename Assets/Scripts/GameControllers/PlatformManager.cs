@@ -151,7 +151,7 @@ namespace ZigZag
 			int index = _platforms.IndexOf(outedPlatform);
 			int fadeablePlatormIndex = index - _gameConfig.TailLengthForHide;
 
-			//Скрыть платформу и вернуть в пул если на {tailStep} позади от текущей
+			//Скрыть платформу и вернуть в пул если на {TailLengthForHide} позади от текущей
 
 			if (index > 0 && fadeablePlatormIndex > 0)
 			{

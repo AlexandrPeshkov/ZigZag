@@ -6,6 +6,9 @@ using ZigZag.Services;
 
 namespace ZigZag.UI
 {
+	/// <summary>
+	/// Окно жизней
+	/// </summary>
 	public class LifeValueView : MonoBehaviour
 	{
 		[SerializeField]

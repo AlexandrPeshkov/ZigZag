@@ -9,14 +9,14 @@ namespace ZigZag
 	{
 		private const float _baseSpeed = 5f;
 
-		private float _speedBonus;
+		private float _currentSpeedBonus;
 
 		private readonly PlayerPrefsStorage _prefsStorage;
 
 		/// <summary>
 		/// Скорость сферы
 		/// </summary>
-		public float Speed => _baseSpeed * DifficultyLevel + _speedBonus;
+		public float Speed => _baseSpeed * DifficultyLevel + _currentSpeedBonus;
 
 		/// <summary>
 		/// Текущая сложность
@@ -51,7 +51,7 @@ namespace ZigZag
 		/// <param name="speedBonus"></param>
 		public void ChangeSpeedBonus(float speedBonus)
 		{
-			_speedBonus = speedBonus;
+			_currentSpeedBonus = speedBonus;
 		}
 
 		/// <summary>
@@ -62,6 +62,9 @@ namespace ZigZag
 			DifficultyLevel++;
 		}
 
+		/// <summary>
+		/// Добавить жизнь
+		/// </summary>
 		public void AddLife()
 		{
 			Lifes++;
@@ -69,6 +72,9 @@ namespace ZigZag
 			LifesChanged?.Invoke(Lifes);
 		}
 
+		/// <summary>
+		/// Использовать жизнь
+		/// </summary>
 		public void UseLife()
 		{
 			Lifes--;

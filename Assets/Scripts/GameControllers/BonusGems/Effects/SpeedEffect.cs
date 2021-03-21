@@ -58,10 +58,10 @@ namespace ZigZag
 
 			yield return new WaitForSeconds(Seconds);
 
-			//if (_cancelation)
-			//{
-			//	yield break;
-			//}
+			if (_cancelation)
+			{
+				yield break;
+			}
 
 			_gamePlay.ChangeSpeedBonus(0);
 		}

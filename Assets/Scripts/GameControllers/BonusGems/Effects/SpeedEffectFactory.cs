@@ -4,13 +4,13 @@ namespace ZigZag
 {
 	public class SpeedEffectFactory : IEffectFactory<SpeedEffect>
 	{
-		private readonly GamePlayService _gamePlay;
-
-		private readonly DiContainer _container;
-
 		private const int _baseEffectTime = 5;
 
 		private const float _baseEffectSpeed = 1f;
+
+		private readonly GamePlayService _gamePlay;
+
+		private readonly DiContainer _container;
 
 		public SpeedEffectFactory(GamePlayService gamePlay, DiContainer container)
 		{

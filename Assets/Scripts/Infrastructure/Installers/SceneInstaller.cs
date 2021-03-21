@@ -91,8 +91,6 @@ namespace ZigZag.Infrastructure
 
 			Container.Bind<SoundManager>().FromComponentInNewPrefab(_soundManagerPrefab).AsSingle().NonLazy();
 
-			//Container.Bind<GameCameraController>().FromNewComponentOn(Camera.main.gameObject).AsSingle().NonLazy();
-
 			Container.Bind<SphereController>()
 				.FromComponentInNewPrefab(_sphereControllerPrefab)
 				.WithGameObjectName(SphereController._objectName)

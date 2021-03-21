@@ -15,7 +15,7 @@ namespace ZigZag
 		{
 			LifeEffect lifeEffect = _container.Resolve<LifeEffect>();
 
-			lifeEffect.Initialize(1);
+			lifeEffect.Initialize(lifes: 1);
 
 			return lifeEffect;
 		}

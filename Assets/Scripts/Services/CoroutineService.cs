@@ -3,49 +3,54 @@ using UnityEngine;
 
 namespace ZigZag.Services
 {
-	public sealed class CoroutineHolder : MonoBehaviour
-	{
-	}
-
+	/// <summary>
+	/// Сервис работы с коротинами
+	/// </summary>
 	public class CoroutineService
 	{
-		private CoroutineHolder _runner;
+		private CoroutineHolder _holder;
 
 		private readonly object _lock = new object();
 
-		private CoroutineHolder Runner
+		private CoroutineHolder Holder
 		{
 			get
 			{
-				if (_runner == null)
+				if (_holder == null)
 				{
 					lock (_lock)
 					{
-						if (_runner == null)
+						if (_holder == null)
 						{
-							_runner = new GameObject("Static Coroutine RestClient").AddComponent<CoroutineHolder>();
-							Object.DontDestroyOnLoad(_runner);
+							_holder = new GameObject("Static Coroutine RestClient").AddComponent<CoroutineHolder>();
+							Object.DontDestroyOnLoad(_holder);
 						}
 					}
 				}
 
-				return _runner;
+				return _holder;
 			}
 		}
 
-		public Coroutine StartCoroutine(IEnumerator coroutine) => Runner.StartCoroutine(coroutine);
+		/// <summary>
+		/// Запустить коротину
+		/// </summary>
+		/// <param name="coroutine"></param>
+		/// <returns></returns>
+		public Coroutine StartCoroutine(IEnumerator coroutine) => Holder.StartCoroutine(coroutine);
 
+		/// <summary>
+		/// Остановить коротину
+		/// </summary>
+		/// <param name="coroutine"></param>
 		public void StopCoroutine(Coroutine coroutine)
 		{
 			if (coroutine != null)
 			{
-				Runner.StopCoroutine(coroutine);
+				Holder.StopCoroutine(coroutine);
 			}
 		}
 
-		public void Dispose()
-		{
-			Object.DestroyImmediate(_runner);
-		}
+		public sealed class CoroutineHolder : MonoBehaviour { }
 	}
 }
