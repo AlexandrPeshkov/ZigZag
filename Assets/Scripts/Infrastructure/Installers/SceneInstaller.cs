@@ -84,6 +84,8 @@ namespace ZigZag.Infrastructure
 
 			Container.Bind<InputHandler>().FromNewComponentOnNewGameObject().AsSingle();
 
+			Container.Bind<CoroutineService>().AsSingle();
+
 			//Game managers
 			Container.Bind<PlatformManager>().FromComponentInNewPrefab(_platformManagerPrefab).AsSingle().NonLazy();
 
@@ -106,6 +108,10 @@ namespace ZigZag.Infrastructure
 
 			//Gems and effects
 			Container.Bind<EffectManager>().AsSingle();
+
+			Container.Bind<SpeedEffect>().AsTransient();
+			Container.Bind<PointsEffect>().AsTransient();
+			Container.Bind<LifeEffect>().AsTransient();
 
 			Container.Bind<IEffectFactory<SpeedEffect>>().To<SpeedEffectFactory>().AsSingle();
 			Container.Bind<IEffectFactory<PointsEffect>>().To<PointsEffectFactory>().AsSingle();

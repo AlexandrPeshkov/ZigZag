@@ -1,22 +1,28 @@
-﻿namespace ZigZag
+﻿using Zenject;
+
+namespace ZigZag
 {
 	public class PointsEffectFactory : IEffectFactory<PointsEffect>
 	{
 		private const int _baseBonusPoints = 5;
 
-		private readonly ScoreService _scoreService;
-
 		private readonly GamePlayService _gamePlayService;
 
-		public PointsEffectFactory(ScoreService scoreService, GamePlayService gamePlayService)
+		private readonly DiContainer _container;
+
+		public PointsEffectFactory(GamePlayService gamePlayService, DiContainer container)
 		{
-			_scoreService = scoreService;
 			_gamePlayService = gamePlayService;
+			_container = container;
 		}
 
 		public PointsEffect Create()
 		{
-			return new PointsEffect(_scoreService, _gamePlayService.DifficultyLevel * _baseBonusPoints);
+			PointsEffect pointsEffect = _container.Resolve<PointsEffect>();
+
+			pointsEffect.Initialize(points: _gamePlayService.DifficultyLevel * _baseBonusPoints);
+
+			return pointsEffect;
 		}
 	}
 }

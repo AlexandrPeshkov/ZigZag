@@ -11,9 +11,13 @@
 
 		public int LifesCount { get; private set; }
 
-		public LifeEffect(GamePlayService gamePlayService, int lifes)
+		public LifeEffect(GamePlayService gamePlayService)
 		{
 			_gamePlayService = gamePlayService;
+		}
+
+		public void Initialize(int lifes)
+		{
 			LifesCount = lifes;
 		}
 

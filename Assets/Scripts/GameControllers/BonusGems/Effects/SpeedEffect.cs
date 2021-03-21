@@ -1,5 +1,6 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections;
+using UnityEngine;
+using ZigZag.Services;
 
 namespace ZigZag
 {
@@ -11,52 +12,57 @@ namespace ZigZag
 		/// <summary>
 		/// Бонус к скорости
 		/// </summary>
-		private readonly float _speed;
+		private float Speed { get; set; }
 
 		/// <summary>
 		/// Время действия
 		/// </summary>
-		private readonly int _seconds;
+		private int Seconds { get; set; }
 
 		private readonly GamePlayService _gamePlay;
 
-		private readonly CancellationToken _cancellationToken;
+		private readonly CoroutineService _coroutineService;
 
-		private readonly CancellationTokenSource _tokenSource;
+		private bool _cancelation;
+
+		private Coroutine _coroutine;
 
 		public EffectLifecycle EffectLifecycle => EffectLifecycle.Temporary;
 
-		public SpeedEffect(int seconds, float speed, GamePlayService gamePlay)
+		public SpeedEffect(GamePlayService gamePlay, CoroutineService coroutineService)
 		{
+			_coroutineService = coroutineService;
 			_gamePlay = gamePlay;
-			_seconds = seconds;
-			_speed = speed;
+		}
 
-			_tokenSource = new CancellationTokenSource();
-			_cancellationToken = _tokenSource.Token;
+		public void Initialize(int seconds, float speed)
+		{
+			Seconds = seconds;
+			Speed = speed;
 		}
 
 		public void Apply()
 		{
-			Task.Run(ApplySpeed, _cancellationToken).ConfigureAwait(false).GetAwaiter();
+			_coroutine = _coroutineService.StartCoroutine(ApplySpeed());
 		}
 
 		public void Cancel()
 		{
-			_tokenSource.Cancel();
+			_cancelation = true;
+			_coroutineService.StopCoroutine(_coroutine);
 		}
 
-		//TODO плавное замедление
-		private async Task ApplySpeed()
+		private IEnumerator ApplySpeed()
 		{
-			_gamePlay.ChangeSpeedBonus(_speed);
+			_gamePlay.ChangeSpeedBonus(Speed);
 
-			await Task.Delay(_seconds * 1000);
+			yield return new WaitForSeconds(Seconds);
 
-			if (_cancellationToken.IsCancellationRequested)
-			{
-				_cancellationToken.ThrowIfCancellationRequested();
-			}
+			//if (_cancelation)
+			//{
+			//	yield break;
+			//}
+
 			_gamePlay.ChangeSpeedBonus(0);
 		}
 	}

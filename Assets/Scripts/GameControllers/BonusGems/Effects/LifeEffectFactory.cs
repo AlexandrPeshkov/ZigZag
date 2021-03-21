@@ -1,17 +1,23 @@
-﻿namespace ZigZag
+﻿using Zenject;
+
+namespace ZigZag
 {
 	public class LifeEffectFactory : IEffectFactory<LifeEffect>
 	{
-		private GamePlayService _gamePlayService;
+		private readonly DiContainer _container;
 
-		public LifeEffectFactory(GamePlayService gamePlayService)
+		public LifeEffectFactory(DiContainer container)
 		{
-			_gamePlayService = gamePlayService;
+			_container = container;
 		}
 
 		public LifeEffect Create()
 		{
-			return new LifeEffect(_gamePlayService, 1);
+			LifeEffect lifeEffect = _container.Resolve<LifeEffect>();
+
+			lifeEffect.Initialize(1);
+
+			return lifeEffect;
 		}
 	}
 }

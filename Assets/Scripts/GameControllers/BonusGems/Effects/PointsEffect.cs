@@ -11,9 +11,13 @@
 
 		public EffectLifecycle EffectLifecycle => EffectLifecycle.Instantaneous;
 
-		public PointsEffect(ScoreService scoreService, int points)
+		public PointsEffect(ScoreService scoreService)
 		{
 			_scoreService = scoreService;
+		}
+
+		public void Initialize(int points)
+		{
 			Points = points;
 		}
 
