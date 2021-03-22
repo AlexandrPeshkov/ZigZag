@@ -9,4 +9,3 @@ Used:
 -Extenject
 -MemoryPool
 -ParticleSystem
--CG Shaders
